@@ -1,0 +1,102 @@
+.main-box{
+	height : 600px;
+	width : 900px;
+	margin : 0px auto;
+	position:relative;
+	background : url('../images/images.jpg');
+	background-size : 100%;
+}
+
+.small-box{
+	position:absolute;
+
+}
+.small-boxe{
+	position:absolute;
+	background: green;
+}
+.player-info{
+	height: 30px;
+	width: 110px;
+	position: absolute;
+	color: white;
+}
+
+.img{
+	position : absolute;
+	
+}
+
+.all-btn{
+	height: 30px;
+	display: block;
+	cursor: pointer;
+	border: 1px solid black;
+	margin-top: 5px;
+	
+}
+
+.player-input{
+	height: 100px;
+	width: 200px;
+	position: absolute;
+	bottom: 0px;
+	color: white;
+	right: 0px;
+	
+}
+
+.score{
+	background: black;
+	height: 500px;
+	width: 550px;
+	position: absolute;
+	left: 400px;
+	top: 50px;
+	z-index: 1;
+	color: white;
+	display: none;
+	text-align: center;
+	
+}
+
+.next-button{
+	height: 30px;
+	display: block;
+	cursor: pointer;
+	border: 1px solid black;
+	position: absolute;
+	margin-top: 20px;
+	left: 40%;
+}
+
+.newgame-btn{
+	height: 30px;
+	display: block;
+	cursor: pointer;
+	border: 1px solid black;
+	position: absolute;
+	top:50%;
+	left: 47%;
+	z-index: 2;
+	display: none;
+	
+}
+
+tr{
+	text-align: center;
+	
+}
+td{
+	width: 110px;
+	border: 1px solid white;
+	color: white;
+}
+
+.result{
+	margin: 0px auto;
+	width: 100px;
+	height: 30px;
+	margin-top: 10px;
+	
+}

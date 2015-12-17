@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title></title>
+		<link href="css/style.css" rel="stylesheet" />
+	</head>
+	
+	<body>
+		<script src="js/Rule.js"></script>
+		<script src="js/Score.js"></script>
+		
+		<script src="js/MainGame.js"></script>
+		<script src="js/SubGame.js"></script>
+		<script src="js/Box.js"></script>
+		<script src="js/Deck.js"></script>
+		<script src="js/Card.js"></script>	
+		<script src="js/Hand.js"></script>
+		<script src="js/Animate.js"></script>
+		<script src="js/AIHand.js"></script>
+		<script src="js/Player.js"></script>
+		<script>
+			var mainGame = new MainGame();
+			mainGame.initScoreDiv();
+			mainGame.initGame();
+			finalScore = new Score();
+			
+			var newGameBtn = document.createElement('button');
+			newGameBtn.innerHTML = 'New Game';
+			newGameBtn.setAttribute('class', 'newgame-btn');
+			document.body.appendChild(newGameBtn);
+			newGameBtn.addEventListener('click', function(){
+				document.body.removeChild(document.getElementsByClassName('score')[0]);
+				document.getElementsByClassName('newgame-btn')[0].style.display = 'none';
+				var mainGame = new MainGame();
+				mainGame.initScoreDiv();
+				mainGame.initGame();
+				finalScore = new Score();
+			});
+			//mainGame.start();
+		</script>	
+	</body>
+</html>
