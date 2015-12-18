@@ -1,32 +1,36 @@
-function Rule(h1, h2, h3, h4){
+function Rule(){
 	
-	var hand = h4;
-	var p1Hand = h1;
-	var p2Hand = h2;
-	var p3Hand = h3;
 	var validCard = [], troopCard = [];
+	var that = this;
 		
 	this.winCheck = function(firstCard, secondCard, thirdCard, fourthCard){
-			
-		if(firstCard.getValue() > secondCard.getValue() && firstCard.getValue() > thirdCard.getValue() && firstCard.getValue() > fourthCard.getValue())
+		var cards = [];
+		cards.push(firstCard);
+		cards.push(secondCard);
+		cards.push(thirdCard);
+		cards.push(fourthCard);
+		
+		var highCard = that.checkHighCard(cards);
+		if(highCard == firstCard)
 			return 1;
 		
-		else if(secondCard.getValue() > firstCard.getValue() && secondCard.getValue() > thirdCard.getValue() && secondCard.getValue() > fourthCard.getValue())
+		else if(highCard == secondCard)
 			return 2;
 		
-		else if(thirdCard.getValue() > firstCard.getValue() && thirdCard.getValue() > secondCard.getValue() && thirdCard.getValue() > fourthCard.getValue())
+		else if(highCard == thirdCard)
 			return 3;
 		
 		else
 			return 4;
 	}
 
-	this.checkHighCard = function(card1, card2, card3, card4, playedSuit){
+	this.checkHighCard = function(cards){
 		var max ;
-		valid(card1, playedSuit);
-		valid(card2, playedSuit);
-		valid(card3, playedSuit);
-		valid(card4, playedSuit);
+		var playedSuit = cards[0].getSuit();
+		
+		for(var i = 0; i < cards.length; i++){
+			valid(cards[i], playedSuit);			
+		}
 		
 		if(troopCard.length == 0){
 			max = validCard[0];
@@ -47,7 +51,7 @@ function Rule(h1, h2, h3, h4){
 		troopCard = [];
 		return max;
 	}
-	
+	 
 	var valid = function(card, playedSuit){
 		if(card != null){
 			if(card.getSuit() == 1)
@@ -58,15 +62,19 @@ function Rule(h1, h2, h3, h4){
 	}
 	
 	
-	this.checkValidity = function(card, neededSuit, highCard){
+	this.checkValidity = function(cards, hand, thrown){
 		var value;
-		var suitInHand = checkSuitInHand(neededSuit, highCard);
-		var troopInHand = checkTroopInHand(highCard);
-		var playedSuit = card.getSuit();
-		var playedValue = card.getValue();
+		var length = cards.length;
+		var neededSuit = cards[0].getSuit();
+		var highCard = that.checkHighCard(cards);
+				
+		var suitInHand = checkSuitInHand(neededSuit, highCard, hand);
+		var troopInHand = checkTroopInHand(highCard, hand);
+		var playedSuit = thrown.getSuit();
+		var playedValue = thrown.getValue();
 		var highCardSuit = highCard.getSuit();
 		var highCardValue = highCard.getValue();
-					
+		
 		if(highCardSuit == neededSuit){
 			
 			if(playedSuit == neededSuit){
@@ -111,21 +119,18 @@ function Rule(h1, h2, h3, h4){
 					value = false;
 			}
 			else{
-				if(suitInHand == 0 || troopInHand == 0 || troopInHand == 1)
+				if(suitInHand == 0 && (troopInHand == 0 || troopInHand == 1))
 					value = true;
 				else 
 					value = false;
 			}
 			
-		}
+		} 
 		
-		 //if(value = true){
-			//hand.removePlayerCard(card);
-		//}	 
 		return value;
-	}
+	} 
 	
-	var checkSuitInHand = function(validSuit, highCard){
+	var checkSuitInHand = function(validSuit, highCard, hand){
 		
 		for(var i = 0; i <hand.getCardCount(); i++){
 			var card = hand.getCard(i); 
@@ -146,7 +151,7 @@ function Rule(h1, h2, h3, h4){
 		return 0;
 	}
 	
-	var checkTroopInHand = function(highCard){
+	var checkTroopInHand = function(highCard, hand){
 		
 		
 		for(var i = 0; i < hand.getCardCount(); i++){
@@ -166,4 +171,6 @@ function Rule(h1, h2, h3, h4){
 		}
 		return 0;
 	}
+	
+
 }

@@ -38,48 +38,18 @@ function Hand(i) {
 		return hand[position];
   }
 	
+	this.getPosition = function(card){
+		var index = hand.indexOf(card);
+		return index;
+	}
+	
 	this.removePlayerCard = function(card){
 		 var index = hand.indexOf(card);
 		 //console.log(index);
 		 hand[index] = null;
 	}
 	
-	this.setImage = function(position, showCard){
-		/* id = position;
-		var showCard = that.getCard(position);
-		var imageNum = showCard.getImgValue();
-		
-		var imgDiv = document.createElement('div');
-		var img = document.createElement('img');
-		
-		img.setAttribute('src','images/'+0+'.gif');
-		img.setAttribute('id', 'img' + (id + (playerNum * 13)));
-		imgDiv.style.position = 'absolute';
-		
-		if(playerNum % 2 != 0){
-			imgDiv.style.left = x + 'px';
-			x = x + 25;
-		}
-		else {
-			imgDiv.style.top = y + 'px';
-			y = y + 20;
-		}
-		
-		imgDiv.appendChild(img);
-		playerBox.appendChild(imgDiv); */
-		var imgDiv = document.getElementById((position+(i*13)));
-		
-		var img = document.createElement('img');
-		if(showCard == false)
-			img.setAttribute('src','images/'+0+'.gif');
-		else{
-			var showCard = that.getCard(position);
-			var imageNum = showCard.getImgValue();
-			img.setAttribute('src','images/'+imageNum+'.gif');
-		}
-		imgDiv.appendChild(img);
-		
-	}
+	
 	
 	
    this.sortByValue = function() {

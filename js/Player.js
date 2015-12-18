@@ -21,7 +21,7 @@ function Player(h){
 	this.checkValidity = function(card1, card2, card3, card4, playedSuit){
 		var playedSuit, inHand, troopInHand, highCard;
 		
-		console.log( playedSuit);
+		/* console.log( playedSuit);
 		if(!card1 && !card2 && !card3){
 			return true;
 		}
@@ -41,8 +41,8 @@ function Player(h){
 		troopInHand = checkTroopInHand();
 		if(playedSuit == card4.getSuit())
 			return false;
-		
-		
+		 */
+		return true;
 	}
 	
 	
