@@ -11,7 +11,7 @@ function Score(){
 		
 		p1Score.push(p1Final);
 		p2Score.push(p2Final);
-		p3Score.push(p2Final);
+		p3Score.push(p3Final);
 		yourScore.push(p4Final);
 		
 	}

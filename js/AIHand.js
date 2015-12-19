@@ -10,6 +10,10 @@ function AIPlayer(h){
 	var troopInHand = [];
 	var otherCards = [];
 	
+	var heartInHand = [];
+	var spadeInHand = [];
+	var clubInHand = [];
+	var diamondInHand = [];
 	this.setCalledHands = function(num){
 		calledHands = num;
 	}
@@ -23,6 +27,7 @@ function AIPlayer(h){
 	this.getWonHands = function(){
 		return wonHands;
 	}
+	
 	
 	this.throwCard = function(cards){
 		var card, playedSuit;

@@ -1,15 +1,17 @@
 function SubGame(){
 	var chair = [];
-	var animator , count = 0, intervalId, img = [], imgPosition = 0, playedSuit, highCard;
+	var animator , count = 0, intervalId, img = [], imgPosition = 0, playedSuit, highCard, throwTurn, callTurn;
 	var subGameView = new SubGameView();
-	var p1Won = p2Won = p3Won = youWon = 0, p1Played, p2Played, p3Played, youPlayed, turn = 0, round = 0;
+	var p1Won = p2Won = p3Won = youWon = 0, p1Played, p2Played, p3Played, youPlayed, turn, round = 0;
 	var showBtn, playerDiv = [];
-	
+	var p1Called, p2Called, p3Called, youCalled;
 	var playerInfo = [], cardBox = [];
 	
 	var player1, player2, player3, yourHand;
 	var rule;
 	var thrownCards = [];
+	
+	
 	for(var i = 0; i < 13; i++){
 		thrownCards[i] = [];
 	}
@@ -29,6 +31,7 @@ function SubGame(){
 		subGameView.setPlayingArea();
 		subGameView.setThrowingArea();
 		
+		setTurn();
 		setHand();
 		setDeck();
 		dealCards();
@@ -36,6 +39,11 @@ function SubGame(){
 		setTimeout(showAllCard, 3000);
 	}
 	
+	
+	var setTurn = function(){
+		
+		turn = wholeRound % 4;
+	}
 	
 	var setHand = function(){
 		player1 = new Hand(0);
@@ -65,6 +73,10 @@ function SubGame(){
 		aIPlayer1 = new AIPlayer(player1);
 		aIPlayer2 = new AIPlayer(player2);
 		aIPlayer3 = new AIPlayer(player3);
+		
+		/* aIPlayer1.separateCards();
+		aIPlayer2.separateCards();
+		aIPlayer3.separateCards(); */
 		
 		rule = new Rule();
 	}
@@ -178,11 +190,42 @@ function SubGame(){
 		}
 		
 		showBtn.removeEventListener('click', arrangeCard);
+		callTurn = 0;
 		callHand();
 	}
 		
-	
 	var callHand = function(){
+		
+		if(turn == 0 && callTurn != 4)
+			callYourHand();
+		
+		if(turn == 1 && callTurn != 4){
+			p1Called = aIPlayer1.callHand();
+			subGameView.setCalledHandsView(p1Called, 0);
+			turn++;
+			callTurn++;
+		}
+		if(turn == 2 && callTurn != 4){
+			p2Called = aIPlayer2.callHand();
+			subGameView.setCalledHandsView(p2Called, 1);
+			turn++;
+			callTurn++;
+		}
+		if(turn == 3 && callTurn != 4){
+			p3Called = aIPlayer3.callHand();
+			subGameView.setCalledHandsView(p3Called, 2);
+			turn = 0;
+			callTurn++;
+			callHand();
+		}
+		if(callTurn == 4){
+			finalScore.setCalledHands(p1Called, p2Called, p3Called, parseInt(youCalled));
+		
+			startRound();
+		}
+	}
+	
+	var callYourHand = function(){
 		
 		subGameView.callHandView();
 		showBtn.addEventListener('click',callNext);
@@ -192,71 +235,76 @@ function SubGame(){
 	
 	var callNext = function(){
 		var callHandSelect = document.getElementsByClassName('select-hand')[0];
-		var youCalled = callHandSelect[callHandSelect.selectedIndex].value;
+		youCalled = callHandSelect[callHandSelect.selectedIndex].value;
 		
 		you.setCalledHands(youCalled);
-		
+		subGameView.setCalledHandsView(youCalled, 3);
+					
 		showBtn.removeEventListener('click',callNext);
-		
-		var p1Called = aIPlayer1.callHand();
-		var p2Called = aIPlayer2.callHand();
-		var p3Called = aIPlayer3.callHand();
-		
-		subGameView.setCalledHandsView(youCalled, p1Called, p2Called, p3Called);
-		
-		finalScore.setCalledHands(p1Called, p2Called, p3Called, parseInt(youCalled));
-		
-		startRound();
-		
+		turn++;
+		callTurn++;
+		callHand();
+			
 	}
 	
 	var startRound = function(){
 		imgPosition = 0;
+		throwTurn = 0;
 		p1Played = p2Played = p3Played = youPlayed = null;
 		
-		if(round == 13 ){
+		if(round == 2){
 			finish();
 		}
-		else if (turn == 0){
+		
+		else 
+			throwCards();
+	}
+	
+	
+	var throwCards = function(){
+		var timer = 500;
+		if(turn == 0 && throwTurn != 4){
 			youThrowCard();
 		}
-		
-		else if(turn == 1){
+		if(turn == 1 && throwTurn != 4){
+			console.log('jkdf');
 			p1Played = aIPlayer1.throwCard(thrownCards[round]);
 			thrownCards[round].push(p1Played);
-			
-			p2Played = aIPlayer2.throwCard(thrownCards[round]);
-			thrownCards[round].push(p2Played);
-			
-			p3Played = aIPlayer3.throwCard(thrownCards[round]);
-			thrownCards[round].push(p3Played);
-		
-			aIThrowCardP1();
-			setTimeout(aIThrowCardP2,1000);
-			setTimeout(aIThrowCardP3,2000);
-			setTimeout(youThrowCard,3000);
+			console.log(p1Played.getValue());
+			setTimeout(aIThrowCardP1, timer);
+			turn++;
+			throwTurn++;
+			timer += 500;
 		}
 		
-		else if(turn ==2){
+		if(turn == 2  && throwTurn != 4){
 			p2Played = aIPlayer2.throwCard(thrownCards[round]);
 			thrownCards[round].push(p2Played);
-			
-			p3Played = aIPlayer3.throwCard(thrownCards[round]);
-			thrownCards[round].push(p3Played);
-			
-			aIThrowCardP2();
-			setTimeout(aIThrowCardP3,1000);
-			setTimeout(youThrowCard,2000);
+			setTimeout(aIThrowCardP2, timer);
+			turn++;
+			throwTurn++;
+			timer += 500;
 		}
 		
-		else{
+		if(turn == 3 && throwTurn != 4){
 			p3Played = aIPlayer3.throwCard(thrownCards[round]);
 			thrownCards[round].push(p3Played);
+			setTimeout(aIThrowCardP3, timer);
+			turn = 0;
+			throwTurn++;
+			console.log(throwTurn);
+			timer += 500;
+			setTimeout(throwCards, timer);
 			
-			aIThrowCardP3();
-			setTimeout(youThrowCard,1000);
+		}
+		
+		if(throwTurn == 4){
+			setTimeout(finishRound, timer);
+			throwTurn = 0;
+			setTimeout(startRound, timer + 500);
 		}
 	}
+	
 	
 	var youThrowCard = function(){
 		//console.log(highCard ,'lksjdflkj');		
@@ -276,7 +324,7 @@ function SubGame(){
 		youPlayed = yourHand.getCard(pos);
 		
 		//if(highCard!=null)
-		if(turn != 0){
+		if(thrownCards[round] != 0){
 			valid = rule.checkValidity(thrownCards[round], yourHand, youPlayed); 
 		}
 				
@@ -306,54 +354,10 @@ function SubGame(){
 			for(var i = 0; i < 13; i++ ){
 				playerDiv[i].removeEventListener('click', throwCard);
 			}
-		
-			if(turn == 0){
-				p1Played = aIPlayer1.throwCard(thrownCards[round]);
-				thrownCards[round].push(p1Played);
-				
-				p2Played = aIPlayer2.throwCard(thrownCards[round]);
-				thrownCards[round].push(p2Played);
-				
-				p3Played = aIPlayer3.throwCard(thrownCards[round]);
-				thrownCards[round].push(p1Played);
-				
-				setTimeout(aIThrowCardP1,1000);
-				setTimeout(aIThrowCardP2,2000);
-				setTimeout(aIThrowCardP3,3000);
-		
-				setTimeout(finishRound, 4000);
-				setTimeout(startRound, 4500);
-			}
-		
-			else if(turn == 1){
-				setTimeout(finishRound, 1000);
-				setTimeout(startRound, 1500);
-		
-			}
-		
-			else if(turn == 2){
-				p1Played = aIPlayer1.throwCard(thrownCards[round]);
-				thrownCards[round].push(p1Played);
-				
-				setTimeout(aIThrowCardP1,1000);
+			turn++;
+			throwTurn++;
+			throwCards();
 			
-				setTimeout(finishRound, 2000);
-				setTimeout(startRound, 2500);
-			}
-		
-			else{
-				p1Played = aIPlayer1.throwCard(thrownCards[round]);
-				thrownCards[round].push(p1Played);
-				
-				p2Played = aIPlayer2.throwCard(thrownCards[round]);
-				thrownCards[round].push(p2Played);
-				
-				setTimeout(aIThrowCardP1,1000);
-				setTimeout(aIThrowCardP2,2000);
-			
-				setTimeout(finishRound, 3000);
-				setTimeout(startRound, 3500);
-			}
 		}
 	}
 	
@@ -363,6 +367,8 @@ function SubGame(){
 		var index = player1.getPosition(p1Played);
 		player1.removePlayerCard(p1Played);
 		
+		
+		console.log(p1Played.getValue(), 'djlfjsd;fjs');
 		animator.init(p1CardValue, 2);
 		animator.animate('right', 375, 1000);
 		
@@ -409,7 +415,7 @@ function SubGame(){
 	
 	var finishRound = function(){
 				
-		var won = rule.winCheck(youPlayed, p1Played, p2Played, p3Played);
+		var won = rule.winCheck(youPlayed, p1Played, p2Played, p3Played, thrownCards[round]);
 		turn = won - 1;
 		round++;
 		

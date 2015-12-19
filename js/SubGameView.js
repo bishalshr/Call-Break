@@ -214,16 +214,15 @@ function SubGameView(){
 		
 	}
 	
-	this.setCalledHandsView = function(youCalled, p1Called, p2Called, p3Called){
+	this.setCalledHandsView = function(called, num){
 		
 		var handsCall = document.getElementsByClassName('handsCalled');
 		
-		mainBox.element.removeChild(playerInput.element);
+		if(num == 3)
+			mainBox.element.removeChild(playerInput.element);
 		
-		handsCall[3].innerHTML = youCalled;
-		handsCall[0].innerHTML = p1Called;
-		handsCall[1].innerHTML = p2Called;
-		handsCall[2].innerHTML = p3Called;
+		handsCall[num].innerHTML = called;
+		
 	}
 	
 	this.throwCard = function(imageValue, imgPosition){

@@ -3,12 +3,7 @@ function Rule(){
 	var validCard = [], troopCard = [];
 	var that = this;
 		
-	this.winCheck = function(firstCard, secondCard, thirdCard, fourthCard){
-		var cards = [];
-		cards.push(firstCard);
-		cards.push(secondCard);
-		cards.push(thirdCard);
-		cards.push(fourthCard);
+	this.winCheck = function(firstCard, secondCard, thirdCard, fourthCard, cards){
 		
 		var highCard = that.checkHighCard(cards);
 		if(highCard == firstCard)
