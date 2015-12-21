@@ -37,7 +37,7 @@ function Animator() {
 		initial = parseInt(initial);
 
 
-		var step = value  / (duration / 50);
+		var step = value  / (duration / 10);
 		var counter = 0;
 		var intervalId = setInterval(function() {
 			counter++;
@@ -45,13 +45,13 @@ function Animator() {
 			// element.innerHTML = current;
 			card.style[cssProperty] = initial + current + 'px';
 			
-			if (counter >= duration/50){
+			if (counter >= duration/10){
 				clearInterval(intervalId);
 				mainBox.removeChild(card);
 				
 			}
 				
-		}, 1);
+		}, 10);
 	}
 	
 }

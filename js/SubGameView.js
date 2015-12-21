@@ -227,8 +227,11 @@ function SubGameView(){
 	
 	this.throwCard = function(imageValue, imgPosition){
 		
-		playedCardsImg[imgPosition].setAttribute('src', 'images/' + imageValue + '.gif');
-		playedCards[imgPosition].element.appendChild(playedCardsImg[imgPosition]);
+		setTimeout(function(){
+			playedCardsImg[imgPosition].setAttribute('src', 'images/' + imageValue + '.gif');
+			playedCards[imgPosition].element.appendChild(playedCardsImg[imgPosition]);	
+		}, 200);
+		
 	}
 	
 	
