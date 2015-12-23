@@ -68,19 +68,15 @@
 	border: 1px solid black;
 	position: absolute;
 	margin-top: 20px;
-	left: 40%;
+	left: 30%;
+}
+
+.close-btn{
+	left: 45%;
 }
 
 .newgame-btn{
-	height: 30px;
-	display: block;
-	cursor: pointer;
-	border: 1px solid black;
-	position: absolute;
-	top: 300px;
-	left: 47%;
-	z-index: 2;
-	display: none;
+	left: 55%;
 	
 }
 

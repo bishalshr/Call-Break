@@ -11,27 +11,37 @@ function AIPlayer(h){
 	var validCard = [];
 	var allCardsHand = [], throwingCard, round = 0, turn, playedSuit, highCard;
 	var trooped = [0, 0, 0, 0];
+	
+	
 	this.setCalledHands = function(num){
 		calledHands = num;
 	}
+	
+	
 	this.getCalledHands = function(){
 		return calledHands;
 	}
 	
+	
 	this.increaseWonHands = function(){
 		wonHands++;
 	}
+	
+	
 	this.getWonHands = function(){
 		return wonHands;
 	}
 	
+	
 	this.setThrownCards = function(cards){
 		var played = cards[0].getSuit();
+		
 		for(var i = 0; i < cards.length; i++){
 			thrownCards.push(cards[i].getValue());
 			
 			if(played > 1 && cards[i].getSuit() == 1)
 				trooped[played - 1] = 1;
+			
 			if(cards[i].getSuit() == 1)
 				thrownSpades.push(cards[i].getValue());
 			
@@ -44,6 +54,7 @@ function AIPlayer(h){
 			else 
 				thrownHearts.push(cards[i].getValue());
 		}
+		
 		thrownSpades.sort(function(a, b){return b-a});
 		thrownDiamonds.sort(function(a, b){return b-a});
 		thrownClubs.sort(function(a, b){return b-a});
@@ -57,7 +68,9 @@ function AIPlayer(h){
 		
 	}
 	
+	
 	var setHighCard = function(array, pos){
+		
 		for(var i = 0; i < array.length; i++){
 			if(array[i] == highCards[pos])
 				highCards[pos]--;
@@ -69,6 +82,7 @@ function AIPlayer(h){
 		
 		for(var i = 0; i < hand.getCardCount(); i++){
 			var card = hand.getCard(i);
+			
 			if(card.getSuit() == 1)
 				spadesInHand.push(card);
 			
@@ -80,6 +94,7 @@ function AIPlayer(h){
 			
 			else
 				heartsInHand.push(card);
+			
 			allCardsHand.push(card);
 		}
 		
@@ -93,6 +108,7 @@ function AIPlayer(h){
 		
 		var highCardSuit, highCardValue;
 		turn = cards.length + 1;
+		
 		if(cards.length != 0){
 			playedSuit = cards[0].getSuit();
 			highCard = rule.checkHighCard(cards);
@@ -106,8 +122,10 @@ function AIPlayer(h){
 			validCard = allCardsHand;
 			situation = 0;
 		}
+		
 		if(validCard.length == 1)
 			throwingCard = validCard[0];
+		
 		else
 			searchSuitableCard();
 		
@@ -268,17 +286,10 @@ function AIPlayer(h){
 				throwMinimalCard();
 		}
 		else{
-			if(spadesInHand.length!= 0)
-				value0 = checkBestCards(spadesInHand, 0);
-			
-			if(heartsInHand.length != 0)
-				value3 = checkBestCards(heartsInHand, 3);
-		
-			if(clubsInHand.length != 0)
-				value2 = checkBestCards(clubsInHand, 2);
-		
-			if(diamondsInHand.length != 0)
-				value1 = checkBestCards(diamondsInHand, 1);
+			value0 = checkBestCards(spadesInHand, 0);
+			value3 = checkBestCards(heartsInHand, 3);
+			value2 = checkBestCards(clubsInHand, 2);
+			value1 = checkBestCards(diamondsInHand, 1);
 			
 			if(value0 == 2)
 				throwingCard = spadesInHand[spadesInHand.length - 1];
@@ -301,14 +312,9 @@ function AIPlayer(h){
 	var dropOthersHighCard = function(){
 		var value1, value2, value3, value;
 		
-		if(heartsInHand.length != 0)
-			value3 = checkBestCards(heartsInHand, 3);
-		
-		if(clubsInHand.length != 0)
-			value2 = checkBestCards(clubsInHand, 2);
-		
-		if(diamondsInHand.length != 0)
-			value1 = checkBestCards(diamondsInHand, 1);
+		value3 = checkBestCards(heartsInHand, 3);
+		value2 = checkBestCards(clubsInHand, 2);
+		value1 = checkBestCards(diamondsInHand, 1);
 	
 		if(value3 == 1)
 			throwingCard = heartsInHand[heartsInHand.length - 2];
@@ -333,7 +339,7 @@ function AIPlayer(h){
 			if (allCardsInHand[i].length < min.length && allCardsInHand[i].length > 0)
 				min = allCardsInHand[i];
 		}
-			if(min[min.length -1].getValue() == highCards[min[0].getSuit() - 1])
+			if(min[min.length -1].getValue() == highCards[min[0].getSuit() - 1] && turn == 1)
 				throwingCard = min[min.length - 1];
 			else
 				throwingCard = min[0];
@@ -344,16 +350,17 @@ function AIPlayer(h){
 	
 	var checkBestCards = function(array, pos){
 		
-		//if(array[array.length - 1].getValue() == highCards[pos] && array[array.length-2].geValue() == highCards[pos] - 1)
-			//return 3;
+		if(array.length != 0){
+			if(array[array.length - 1].getValue() == highCards[pos])
+				return 2;
 		
-		if(array[array.length - 1].getValue() == highCards[pos])
-			return 2;
+			if(array[array.length - 1].getValue() == highCards[pos] - 1 && array.length > 1)
+				return 1;
+			else
+				return 0;
+		}
 		
-		if(array[array.length - 1].getValue() == highCards[pos] - 1 && array.length > 1)
-			return 1;
-		else
-			return 0;
+		else return 0;
 	}
 	
 	var searchSuitableCard = function(){

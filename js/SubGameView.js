@@ -1,11 +1,17 @@
-function SubGameView(){
-	var mainBox, box, playerInfo, cardBox = [], flag = 0, playingArea, playedCards = [], playedCardsImg = [], playerInput, callHandSelect,  scoreDiv;
+function SubGameView(finalScore){
+	var mainBox, box, playerInfo, cardBox = [], flag = 0, playingArea, playedCards = [], playedCardsImg = [], playerInput, callHandSelect, handsCalled = [] , handsWon = [];
 	
-	var newBtn = document.createElement('button');
-	newBtn.setAttribute('class','all-btn');
+	var scoreBtn;
+	var mainGame = MainGame.getInstance();
 		
+	var newBtn = new Element();
+	newBtn.create('button');
+	newBtn.addClass('all-btn');
+		
+	
 	this.setTable = function(){
-		mainBox = new Box();
+		mainBox = new Element();
+		mainBox.create('div');
 		mainBox.addClass('main-box');
 		mainBox.appendTo(document.body);
 	}
@@ -14,78 +20,92 @@ function SubGameView(){
 	this.setChair = function(a, b, c, d){
 		var x = 0, y = 0;
 		
-		box = new Box();
+		box = new Element();
+		box.create('div');
 		box.addClass('small-box');
 		
-		box.element.style.left = a + 'px';
-		box.element.style.top = b + 'px';
-		box.element.style.height = c + 'px';
-		box.element.style.width = d + 'px';
+		box.setStyle('left', a, 'px');
+		box.setStyle('top', b, 'px');
+		box.setStyle('height', c, 'px');
+		box.setStyle('width', d, 'px');
 		
-		playerInfo = new Box();
+		playerInfo = new Element();
+		playerInfo.create('div');
 		playerInfo.addClass('player-info');
 		
 		if(a ==700)
-			playerInfo.element.style.top =150 + 'px';
-		
+			playerInfo.setStyle('top', 150);
+			
 		else if(b == 10){
-			playerInfo.element.style.left = 150 + 'px';
-			playerInfo.element.style.bottom = 0 + '%';
+			playerInfo.setStyle('left', 150);
+			playerInfo.setStyle('bottom', 0);
 		}
 		
 		else if(a == 10){
-			playerInfo.element.style.top =150 + 'px';
-			playerInfo.element.style.right =0 + '%';
+			playerInfo.setStyle('top', 150);
+			playerInfo.setStyle('right', 0);
 		}
 		
 		else{
-			playerInfo.element.style.left =150 + 'px';
+			playerInfo.setStyle('left', 150);
 		}
 		
-		var handsCalled = document.createElement('span');
-		var handsWon = document.createElement('span');
+		var handsCalledSpan = new Element();
+		var handsWonSpan = new Element();
 		
-		handsCalled.setAttribute('class','handsCalled');
-		handsWon.setAttribute('class', 'handsWon');
+		handsCalledSpan.create('span');
+		handsWonSpan.create('span');
 		
-		handsCalled.innerHTML = '0';
-		handsWon.innerHTML = '0';
+		handsCalledSpan.addClass('handsCalled');
+		handsWonSpan.addClass('handsWon');
 		
-		var handsCalledNode = document.createTextNode('Hands Called:');
-		var handsWonNode = document.createTextNode(' Hands Won:');
+		handsCalledSpan.addText('0');
+		handsWonSpan.addText('0');
 		
-		playerInfo.element.appendChild(handsCalledNode);
-		playerInfo.element.appendChild(handsCalled);
-		playerInfo.element.appendChild(handsWonNode);
-		playerInfo.element.appendChild(handsWon);
+		handsCalled.push(handsCalledSpan);
+		handsWon.push(handsWonSpan);
+		
+		var handsCalledNode = new Element();
+		var handsWonNode = new Element();
+		
+		handsCalledNode.create('span');
+		handsWonNode.create('span');
+		
+		handsCalledNode.addText('Hands Called:');
+		handsWonNode.addText(' Hands Won:');
+		
+		playerInfo.appendElement(handsCalledNode);
+		playerInfo.appendElement(handsCalledSpan);
+		playerInfo.appendElement(handsWonNode);
+		playerInfo.appendElement(handsWonSpan);
 		
 		playerInfo.appendTo(box.element);
 		
-		for(var i = 0; i <=12; i++){
+		for(var i = 0; i <= 12; i++){
 			var position = i + (flag * 13);
 			
-			cardBox[position] = new Box();
+			cardBox[position] = new Element();
+			cardBox[position].create('div');
 			cardBox[position].addClass('card-holder');
+			cardBox[position].addId(position);
 			
 			box.addClass('small-box');
-			
-			cardBox[position].element.setAttribute('id', position);
 			
 			if(d == 190){
 				
 				if(a == 700)
-					cardBox[position].element.style.right = 0 + 'px';
+					cardBox[position].setStyle('right', 0);
 				
-				cardBox[position].element.style.top = y + 'px';
+				cardBox[position].setStyle('top', y);
 				
 				y = y + 20;
 			}
 			else if(d == 400){
 				
 				if(b == 440)
-					cardBox[position].element.style.bottom = 0 + 'px';
+					cardBox[position].setStyle('bottom', 0);
 				
-				cardBox[position].element.style.left = x + 'px';
+				cardBox[position].setStyle('left', x);
 				
 				x = x + 25;
 			}
@@ -94,233 +114,285 @@ function SubGameView(){
 		
 		flag++;
 		box.appendTo(mainBox.element);
+		return cardBox;
 	}
 	
 	
 	this.setPlayingArea = function(){
 		var x = 0;
 		
-		playingArea = new Box();
+		playingArea = new Element();
+		playingArea.create('div');
 		playingArea.addClass('small-box');
 		
-		playingArea.element.style.left = 350 + 'px';
-		playingArea.element.style.top = 250 + 'px';
-		playingArea.element.style.height = 100 + 'px';
-		playingArea.element.style.width = 200 + 'px';
+		playingArea.setStyle('left', 350, 'px');
+		playingArea.setStyle('top', 250, 'px');
+		playingArea.setStyle('height', 100, 'px');
+		playingArea.setStyle('width', 200, 'px');
 		
 		playingArea.appendTo(mainBox.element);
 	
 		for(i = 0; i < 4; i++){
 			
-			playedCards[i] = new Box();
+			playedCards[i] = new Element();
+			playedCards[i].create('div');
 			playedCards[i].addClass('small-box');
-			
-			playedCards[i].element.style.left = x + 'px';
-			playedCards[i].element.style.background = 'yellow';
-			
+			playedCards[i].setStyle('left', x);
 			playedCards[i].appendTo(playingArea.element);
 			
 			x = x + 30;
 		}
 	}
 	
+	
 	this.setThrowingArea = function(){	
+		
 		for(var i = 0; i < 4; i++){
-			var playedCardImage = document.createElement('img');
-			playedCardImage.setAttribute('class', 'img');
+			var playedCardImage = new Element();
+			playedCardImage.create('img');
+			playedCardImage.addClass('img');
 			playedCardsImg.push(playedCardImage);
 		}
+		
 	}
 	
+	
 	this.showAllCardView = function(){
-		
-		playerInput = new Box();
+		playerInput = new Element();
+		playerInput.create('div');
 		playerInput.addClass('player-input');
 		playerInput.appendTo(mainBox.element);
 	
-		newBtn.innerHTML = 'Show and Arrange Cards';
+		newBtn.addText('Show and Arrange Cards');
 		
-		playerInput.element.appendChild(newBtn);
+		playerInput.appendElement(newBtn);
 		
+		return newBtn;
 	}
 	
 	
 	this.setImage = function(i, position, card, showCard){
-		/* id = position;
-		var showCard = that.getCard(position);
-		var imageNum = showCard.getImgValue();
+		var imgDiv = cardBox[position+(i*13)];
 		
-		var imgDiv = document.createElement('div');
-		var img = document.createElement('img');
+		var img = new Element();
+		img.create('img');
 		
-		img.setAttribute('src','images/'+0+'.gif');
-		img.setAttribute('id', 'img' + (id + (playerNum * 13)));
-		imgDiv.style.position = 'absolute';
-		
-		if(playerNum % 2 != 0){
-			imgDiv.style.left = x + 'px';
-			x = x + 25;
-		}
-		else {
-			imgDiv.style.top = y + 'px';
-			y = y + 20;
-		}
-		
-		imgDiv.appendChild(img);
-		playerBox.appendChild(imgDiv); */
-		var imgDiv = document.getElementById((position+(i*13)));
-		
-		var img = document.createElement('img');
 		if(showCard == false)
 			img.setAttribute('src','images/'+0+'.gif');
+		
 		else{
 			var imageNum = card.getImgValue();
 			img.setAttribute('src','images/'+imageNum+'.gif');
 		}
-		imgDiv.appendChild(img);
+		
+		imgDiv.appendElement(img);
 		
 	}
 	
 	this.arrangeCardView = function(){
 		
 		for(var i = 39; i<=51; i++){
-			var childElement = cardBox[i].element.childNodes;
-			cardBox[i].element.removeChild(childElement[0]);
+			cardBox[i].removeChildElement();
 		}
-			
-			playerInput.element.removeChild(newBtn);
+		playerInput.removeElement(newBtn);
 	}
 	
 	this.callHandView = function(){
 		
-		callHandSelect = document.createElement('select');
-		callHandSelect.setAttribute('class', 'select-hand');
-		var callHandText = document.createTextNode('Call Hands : ');
+		callHandSelect = new Element();
+		callHandSelect.create('select');
+		callHandSelect.addClass('select-hand');
 		
-		newBtn.innerHTML = 'DONE';
+		callHandText = new Element();
+		callHandText.create('span');
+		callHandText.addText('Call Hands : ');
+		
+		newBtn.addText('DONE');
 		
 		for(var i = 1; i<=8 ;i++){
-			var options = document.createElement("option");
-			var textNode = document.createTextNode(i);
+			var options = new Element();
+			options.create('option');
+			
+			var textNode = new Element();
+			textNode.create('span');
+			textNode.addText(i);
+			
 			options.setAttribute('value', i);
-			options.appendChild(textNode);
-			callHandSelect.appendChild(options);
+			options.appendElement(textNode);
+			callHandSelect.appendElement(options);
 		}
 		
-		playerInput.element.appendChild(callHandText);
-		playerInput.element.appendChild(callHandSelect);
-		playerInput.element.appendChild(newBtn);
+		scoreBtn = new Element();
+		scoreBtn.create('button');
+		scoreBtn.addClass('all-btn');
+		scoreBtn.addText('See Score');
+			
+		scoreBtn.element.addEventListener('click', showScore);
 		
+		playerInput.appendElement(callHandText);
+		playerInput.appendElement(callHandSelect);
+		playerInput.appendElement(newBtn);
+		playerInput.appendElement(scoreBtn);
+		
+		return callHandSelect;
 		
 	}
 	
 	this.setCalledHandsView = function(called, num){
 		
-		var handsCall = document.getElementsByClassName('handsCalled');
+		if(num == 3){
+			
+			playerInput.removeElement(callHandText);
+			playerInput.removeElement(callHandSelect);
+			playerInput.removeElement(newBtn);
+			//mainBox.element.removeChild(playerInput.element);
+		}
 		
-		if(num == 3)
-			mainBox.element.removeChild(playerInput.element);
+		handsCalled[num].addText(called);
 		
-		handsCall[num].innerHTML = called;
+	}
+	
+	var showScore = function(){
+		mainGame.scoreDiv.setStyle('display', 'block');
 		
+		mainGame.nextRoundBtn.setStyle('display', 'none');
+		mainGame.closeBtn.setStyle('display', 'block');
+		
+		mainGame.newGameBtn.element.addEventListener('click', newGame);
+			
 	}
 	
 	this.throwCard = function(imageValue, imgPosition){
 		
 		setTimeout(function(){
 			playedCardsImg[imgPosition].setAttribute('src', 'images/' + imageValue + '.gif');
-			playedCards[imgPosition].element.appendChild(playedCardsImg[imgPosition]);	
+			playedCards[imgPosition].appendElement(playedCardsImg[imgPosition]);	
 		}, 200);
 		
 	}
 	
 	
 	this.removeChildNodes = function(round){
-		
-		var childElement = cardBox[round].element.childNodes;
-		cardBox[round].element.remove(childElement);
+		cardBox[round].removeChildElement();
 	}
 	
 	this.updateHandsWon = function(by , qty){
-		var handsWon = document.getElementsByClassName('handsWon');
-		
+			
 		if(by == 1)
-			handsWon[3].innerHTML = qty;
+			handsWon[3].addText(qty);
+		
 		else if(by == 2)
-			handsWon[0].innerHTML = qty;
+			handsWon[0].addText(qty);
+		
 		else if(by == 3)
-			handsWon[1].innerHTML = qty;
+			handsWon[1].addText(qty);
+		
 		else
-			handsWon[2].innerHTML = qty;
+			handsWon[2].addText(qty);
 	}
 	
 	
 	this.clearPlayingArea = function(){
 		
-		playedCards[0].element.removeChild(playedCardsImg[0]);
-		playedCards[1].element.removeChild(playedCardsImg[1]);
-		playedCards[2].element.removeChild(playedCardsImg[2]);
-		playedCards[3].element.removeChild(playedCardsImg[3]);
+		playedCards[0].removeElement(playedCardsImg[0]);
+		playedCards[1].removeElement(playedCardsImg[1]);
+		playedCards[2].removeElement(playedCardsImg[2]);
+		playedCards[3].removeElement(playedCardsImg[3]);
 			
 	}
 	
-	this.updateFinalScore = function(){
-		scoreDiv = document.getElementsByClassName('score')[0];
-		scoreDiv.style.display = 'block';
+	this.updateFinalScore = function(wholeRound){
 		
-		document.getElementsByClassName('newgame-btn')[0].style.display = 'block';
-		scoreTable = document.getElementsByClassName('score-table')[0];
+		mainGame.scoreDiv.setStyle('display', 'block');
+		mainGame.nextRoundBtn.setStyle('display', 'block');
+		mainGame.closeBtn.setStyle('display', 'none');
+		mainGame.newGameBtn.setStyle('display', 'block');
 		
-		var tr = document.createElement('tr');
-		var td0 = document.createElement('td');
-		var td1 = document.createElement('td');
-		var td2 = document.createElement('td');
-		var td3 = document.createElement('td');
-		var td4 = document.createElement('td');
+		scoreTable = mainGame.table;
 		
-		td0.innerHTML = wholeRound + 1;
-		td1.innerHTML = finalScore.getYourScore(wholeRound).toFixed(1);
-		td2.innerHTML = finalScore.getP1Score(wholeRound).toFixed(1);
-		td3.innerHTML = finalScore.getP2Score(wholeRound).toFixed(1);
-		td4.innerHTML = finalScore.getP3Score(wholeRound).toFixed(1);
+		var tr = new Element();
+		var td0 = new Element();
+		var td1 = new Element();
+		var td2 = new Element();
+		var td3 = new Element();
+		var td4 = new Element();
 		
-		tr.appendChild(td0);
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		tr.appendChild(td4);
+		tr.create('tr');
+		td0.create('td');
+		td1.create('td');
+		td2.create('td');
+		td3.create('td');
+		td4.create('td');
+		
+		td0.addText(wholeRound + 1);
+		td1.addText(finalScore.getYourScore(wholeRound).toFixed(1));
+		td2.addText(finalScore.getP1Score(wholeRound).toFixed(1));
+		td3.addText(finalScore.getP2Score(wholeRound).toFixed(1));
+		td4.addText(finalScore.getP3Score(wholeRound).toFixed(1));
+		
+		tr.appendElement(td0);
+		tr.appendElement(td1);
+		tr.appendElement(td2);
+		tr.appendElement(td3);
+		tr.appendElement(td4);
 		
 		wholeRound++;
 				
-		scoreTable.appendChild(tr);
+		scoreTable.appendElement(tr);
 		
-		var totalScore = document.getElementsByClassName('total-score');
+		
 		var yourTotal = finalScore.getYourTotal();
 		var p1Total = finalScore.getP1Total();
 		var p2Total =	finalScore.getP2Total();
 		var p3Total = finalScore.getP3Total();
 		
-		totalScore[0].innerHTML = yourTotal.toFixed(1);
-		totalScore[1].innerHTML = p1Total.toFixed(1);
-		totalScore[2].innerHTML = p2Total.toFixed(1);
-		totalScore[3].innerHTML = p3Total.toFixed(1);
+		mainGame.yourTotal.addText(yourTotal.toFixed(1));
+		mainGame.p1Total.addText(p1Total.toFixed(1));
+		mainGame.p2Total.addText(p2Total.toFixed(1));
+		mainGame.p3Total.addText(p3Total.toFixed(1));
 		
-		var childElement = mainBox.element.childNodes;
-		for(var i = 0; i <=childElement.length; i++){
-			mainBox.element.remove(childElement[i]);
-		}
+		mainBox.removeElements();
 		
+		mainGame.newGameBtn.element.addEventListener('click', newGame);
+		mainGame.nextRoundBtn.element.addEventListener('click', newRound);
+		
+				
 		if(wholeRound == 5){
-			document.getElementsByClassName('next-button')[0].style.display = 'none';
-			var resultDiv = document.createElement('div');
-			resultDiv.setAttribute('class', 'result');
-			scoreDiv.appendChild(resultDiv);
+			mainGame.nextRoundBtn.setStyle('display', 'none');
+			
+			mainGame.newGameBtn.setStyle('left', '42%');
+			mainGame.newGameBtn.setStyle('top', '45%');
+						
+			var resultDiv = new Element();
+			resultDiv.create('div');
+			resultDiv.addClass('result');
+			mainGame.scoreDiv.appendElement(resultDiv);
+			
 			if(yourTotal > p1Total && yourTotal > p2Total && yourTotal > p3Total){
-				resultDiv.innerHTML = 'YOU WON!!!';
+				resultDiv.addText('YOU WON!!!');
 			}
+			
 			else 
-				resultDiv.innerHTML = 'YOU 	LOST!!!';
+				resultDiv.addText('YOU 	LOST!!!');
 		}
+	}
+	
+	var newGame = function(){
+		mainBox.removeElements();
+		
+		console.log(mainBox[0]);
+		mainGame.scoreDiv.removeFrom(document.body);
+		mainGame.newGameBtn.setStyle('display', 'none');
+		mainGame.initScoreDiv();
+		mainGame.initGame();
+			
+		mainGame.newGameBtn.element.removeEventListener('click', newGame);
+		
+	}
+	
+	var newRound = function(){
+		mainGame.newGameBtn.element.removeEventListener('click', newGame);
+		mainGame.nextRoundBtn.element.removeEventListener('click', newRound);
 	}
 }
 
