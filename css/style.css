@@ -1,3 +1,7 @@
+body{
+	font-family: Roboto;
+	font-size: 13px;
+}
 .main-box{
 	height : 600px;
 	width : 900px;
@@ -32,9 +36,12 @@
 	height: 30px;
 	display: block;
 	cursor: pointer;
-	border: 1px solid black;
 	margin-top: 5px;
-	
+	background: url('../images/button.png') 0 0 no-repeat;
+	background-size: 100% 100%;
+	font-family: Montserrat;
+	color: #474141;
+	border: none;
 }
 
 .player-input{
@@ -48,16 +55,17 @@
 }
 
 .score{
-	background: black;
-	height: 500px;
+	height: 320px;
 	width: 550px;
 	position: absolute;
 	left: 400px;
 	top: 50px;
 	z-index: 1;
-	color: white;
-	display: none;
+	background: url('../images/score.png') 0 0 no-repeat;
+	background-size: 100%;
+	 display: none;  
 	text-align: center;
+		padding: 2px 3px;
 	
 }
 
@@ -65,10 +73,21 @@
 	height: 30px;
 	display: block;
 	cursor: pointer;
-	border: 1px solid black;
 	position: absolute;
 	margin-top: 20px;
 	left: 30%;
+	background: url('../images/button.png') 0 0 no-repeat;
+	background-size: 100% 100%;
+	font-family: Montserrat;
+	font-size: 11px;
+	color: #474141;
+	border: none;	
+}
+
+.all-btn:hover, .next-button:hover{
+	color: white;
+	background: url('../images/button2.png') 0 0 no-repeat;
+	background-size: 100% 100%;
 }
 
 .close-btn{
@@ -77,17 +96,24 @@
 
 .newgame-btn{
 	left: 55%;
-	
+}
+
+table {
+	border-collapse: collapse; 
+	font-family: Montserrat;
+
 }
 
 tr{
 	text-align: center;
-	
+	border-bottom: 1px solid #d1d2cb;
+	padding-left: 28px;
 }
 td{
 	width: 110px;
-	border: 1px solid white;
-	color: white;
+	color: #634848;
+	line-height: 30px;
+	
 }
 
 .result{
@@ -95,5 +121,21 @@ td{
 	width: 100px;
 	height: 30px;
 	margin-top: 10px;
+	
+}
+
+.score-header{
+	
+	
+	line-height: 30px;
+	border: none;
+	
+}
+
+.total-score{
+
+	
+	line-height: 30px;
+	border: none;
 	
 }

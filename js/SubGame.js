@@ -1,10 +1,14 @@
 function SubGame(finalScore){
-	var chair = [];
-	var animator , count = 0, intervalId, img = [], imgPosition = 0, playedSuit, highCard, throwTurn, callTurn, wholeRound;
-	var subGameView = new SubGameView(finalScore);
-	var p1Won = p2Won = p3Won = youWon = 0, p1Played, p2Played, p3Played, youPlayed, turn, round = 0;
-	var showBtn, playerDiv = [];
+	var animator;
+	var count = 0, flag = 0;
+	var throwingPos, throwTurn, callTurn, wholeRound, turn, round = 0;
+	var p1Played, p2Played, p3Played, youPlayed;
 	var p1Called, p2Called, p3Called, youCalled;
+	
+	var subGameView = new SubGameView(finalScore);
+	
+	var showBtn, playerDiv = [];
+	
 	var playerInfo = [], cardBox = [];
 	
 	var player1, player2, player3, yourHand;
@@ -43,7 +47,7 @@ function SubGame(finalScore){
 		setDeck();
 		dealCards();
 		
-		setTimeout(showAllCard, 4000);
+		
 	}
 	
 	
@@ -91,7 +95,6 @@ function SubGame(finalScore){
 	var dealCards = function(){
 		count = 0, flag = 0;
 		animator = new Animator();
-		img[0] = img[1] = img[2] = img [3] = 0;
 		
 		deal();
 	
@@ -99,47 +102,45 @@ function SubGame(finalScore){
 	
 	
 	var deal = function(){
-			var snd = new Audio("aud.mp3"); // buffers automatically when created
-			snd.play();
+		var snd = new Audio("aud.mp3"); // buffers automatically when created
+		snd.play();
+		var pos = parseInt(count / 4);
+		
 		if(flag == 0){
 			animator.init(0,0);
-			animator.animate('left', 380, 40);
+			animator.animate('left', 380, 50);
 			
-			var card = player1.getCard(img[0]);
-			subGameView.setImage(0, img[0], card, false);
-			
-			
+			var card = player1.getCard(pos);
+			subGameView.setImage(0, pos, card, false);
+						
 			flag++;
 			count++;
-			img[0]++;
-		
+				
 		}else if(flag == 1){
 			animator.init(0,0);
-			animator.animate('top', -150, 40);
+			animator.animate('top', -150, 50);
 			
-			var card = player2.getCard(img[1]);
-			subGameView.setImage(1, img[1], card, false);
+			var card = player2.getCard(pos);
+			subGameView.setImage(1, pos, card, false);
 						
 			flag++;
 			count++;
-			img[1]++;
-
+			
 		}else if(flag == 2){
 			animator.init(0,0);
-			animator.animate('left', -380, 40);
+			animator.animate('left', -380, 50);
 			
-			var card = player3.getCard(img[2]);
-			subGameView.setImage(2, img[2], card, false);
+			var card = player3.getCard(pos);
+			subGameView.setImage(2, pos, card, false);
 						
 			flag++;
 			count++;
-			img[2]++;
-
+			
 		}else if (flag == 3){
 			animator.init(0, 0);
-			animator.animate('top', 150, 40);
-			var card = yourHand.getCard(img[3]);
-			subGameView.setImage(3, img[3], card, false);
+			animator.animate('top', 150, 50);
+			var card = yourHand.getCard(pos);
+			subGameView.setImage(3, pos, card, false);
 					
 			for(var i = 39; i< 52; i++){
 				playerDiv.push(cardBox[i].element);
@@ -151,12 +152,13 @@ function SubGame(finalScore){
 			
 			flag = 0;
 			count++;
-			img[3]++;
 		}
 		
 		if(count != 52){
 			setTimeout(deal, 70);
 		}
+		else
+			showAllCard();
 	}
 	
 	
@@ -256,10 +258,10 @@ function SubGame(finalScore){
 	
 	var startRound = function(){
 		
-		imgPosition = 0;
+		throwingPos = 0;
 		throwTurn = 0;
 		p1Played = p2Played = p3Played = youPlayed = null;
-		if(round == 1){
+		if(round == 0){
 			setTimeout(finish, 200);
 		}
 		
@@ -366,8 +368,8 @@ function SubGame(finalScore){
 			animator.init(imageValue,1);
 			animator.animate('bottom', 250, 200);
 		
-			subGameView.throwCard(imageValue, imgPosition);
-			imgPosition++;
+			subGameView.throwCard(imageValue, throwingPos);
+			throwingPos++;
 			
 			timer = 500;
 			turn++;
@@ -390,9 +392,9 @@ function SubGame(finalScore){
 		animator.animate('right', 375, 200);
 		
 		subGameView.removeChildNodes(index);
-		subGameView.throwCard(p1CardValue, imgPosition);
+		subGameView.throwCard(p1CardValue, throwingPos);
 		
-		imgPosition++;
+		throwingPos++;
 	}
 	
 	
@@ -410,9 +412,9 @@ function SubGame(finalScore){
 		animator.animate('top', 250, 200);
 			
 		subGameView.removeChildNodes(13 + index);
-		subGameView.throwCard(p2CardValue, imgPosition);
+		subGameView.throwCard(p2CardValue, throwingPos);
 		
-		imgPosition++;
+		throwingPos++;
 	}
 	
 	
@@ -429,9 +431,9 @@ function SubGame(finalScore){
 		animator.animate('left', 375, 200);
 				
 		subGameView.removeChildNodes(26 + index);
-		subGameView.throwCard(p3CardValue, imgPosition);
+		subGameView.throwCard(p3CardValue, throwingPos);
 		
-		imgPosition++;
+		throwingPos++;
 	}
 	
 	

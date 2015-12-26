@@ -1,14 +1,15 @@
 
 var MainGame = (function(){
 	function MainGame(){
-		var subGame, totalTable, wholeRound = 0, finalScore;
+		var subGame, totalTable, finalScore;
 		this.closeBtn, this.nextRoundBtn, this.newGameBtn, this.scoreDiv, this.table;
 		this.yourTotal, this.p1Total, this.p2Total, this.p3Total;
-	
+		this.wholeRound = 0;
+		
 		var that = this;
 		this.initScoreDiv = function(){
 			
-			wholeRound = 0;
+			that.wholeRound = 0;
 			finalScore = new Score();
 			that.scoreDiv = new Element();
 			that.scoreDiv.create('div');
@@ -33,7 +34,7 @@ var MainGame = (function(){
 			that.scoreDiv.appendElement(that.nextRoundBtn);
 			that.scoreDiv.appendElement(that.closeBtn);
 		
-			that.nextRoundBtn.element.addEventListener('click', newRound);
+			//that.nextRoundBtn.element.addEventListener('click', newRound);
 			that.closeBtn.element.addEventListener('click', closeScore);
 		
 			that.scoreDiv.appendTo(document.body);
@@ -48,7 +49,7 @@ var MainGame = (function(){
 	
 		this.initGame = function(){
 			subGame = new SubGame(finalScore);
-			subGame.setWholeRound(wholeRound);
+			subGame.setWholeRound(that.wholeRound);
 			subGame.init();
 		}				
 
@@ -60,7 +61,7 @@ var MainGame = (function(){
 	
 	
 		var newRound = function(){
-			wholeRound = subGame.getWholeRound();
+			that.wholeRound = subGame.getWholeRound();
 			
 			that.scoreDiv.setStyle('display', 'none');
 			that.newGameBtn.setStyle('display', 'none');
@@ -93,8 +94,13 @@ var MainGame = (function(){
 			td2.addText('Ram');
 			td3.addText('Shyam');
 			td4.addText('Hari');
+			
+			td1.addClass('score-header');
+			td2.addClass('score-header');
+			td3.addClass('score-header');
+			td4.addClass('score-header');
+			td5.addClass('score-header');
 		
-			that.table.setStyle('border','1px solid white');
 			that.table.setStyle('width', '550 px');
 		
 			tr.appendElement(td5);
@@ -123,14 +129,10 @@ var MainGame = (function(){
 			var total = new Element();
 			total.create('td');
 		
-			that.yourTotal.addClass('total-score');
-			that.p1Total.addClass('total-score');
-			that.p2Total.addClass('total-score');
-			that.p3Total.addClass('total-score');
-		
+			tr2.addClass('total-score');
+						
 			total.addText('Total');
 		
-			totalTable.setStyle('border', '1px solid white');
 			totalTable.setStyle('width', '550px');
 		
 			tr2.appendElement(total);

@@ -1,5 +1,5 @@
 function SubGameView(finalScore){
-	var mainBox, box, playerInfo, cardBox = [], flag = 0, playingArea, playedCards = [], playedCardsImg = [], playerInput, callHandSelect, handsCalled = [] , handsWon = [];
+	var mainBox, boxes = [], playerInfo, cardBox = [], flag = 0, playingArea, playedCards = [], playedCardsImg = [], playerInput, callHandSelect, handsCalled = [] , handsWon = [];
 	
 	var scoreBtn;
 	var mainGame = MainGame.getInstance();
@@ -20,7 +20,7 @@ function SubGameView(finalScore){
 	this.setChair = function(a, b, c, d){
 		var x = 0, y = 0;
 		
-		box = new Element();
+		var box = new Element();
 		box.create('div');
 		box.addClass('small-box');
 		
@@ -113,6 +113,7 @@ function SubGameView(finalScore){
 		}
 		
 		flag++;
+		boxes.push(box);
 		box.appendTo(mainBox.element);
 		return cardBox;
 	}
@@ -163,7 +164,7 @@ function SubGameView(finalScore){
 		playerInput.addClass('player-input');
 		playerInput.appendTo(mainBox.element);
 	
-		newBtn.addText('Show and Arrange Cards');
+		newBtn.addText('Show & Arrange');
 		
 		playerInput.appendElement(newBtn);
 		
@@ -257,6 +258,8 @@ function SubGameView(finalScore){
 		
 		mainGame.nextRoundBtn.setStyle('display', 'none');
 		mainGame.closeBtn.setStyle('display', 'block');
+		mainGame.closeBtn.setStyle('left', '40%');
+		mainGame.newGameBtn.setStyle('left', '50%');
 		
 		mainGame.newGameBtn.element.addEventListener('click', newGame);
 			
@@ -306,7 +309,7 @@ function SubGameView(finalScore){
 		mainGame.scoreDiv.setStyle('display', 'block');
 		mainGame.nextRoundBtn.setStyle('display', 'block');
 		mainGame.closeBtn.setStyle('display', 'none');
-		mainGame.newGameBtn.setStyle('display', 'block');
+	//	mainGame.newGameBtn.setStyle('display', 'block');
 		
 		scoreTable = mainGame.table;
 		
@@ -340,7 +343,13 @@ function SubGameView(finalScore){
 				
 		scoreTable.appendElement(tr);
 		
+		var childElement = mainBox.element.children;
 		
+		for(var i = 0; i < boxes.length; i++){
+			console.log(boxes);
+			mainBox.element.removeChild(boxes[i].element);
+		}
+		mainBox.element.removeChild(playerInput.element);
 		var yourTotal = finalScore.getYourTotal();
 		var p1Total = finalScore.getP1Total();
 		var p2Total =	finalScore.getP2Total();
@@ -351,8 +360,6 @@ function SubGameView(finalScore){
 		mainGame.p2Total.addText(p2Total.toFixed(1));
 		mainGame.p3Total.addText(p3Total.toFixed(1));
 		
-		mainBox.removeElements();
-		
 		mainGame.newGameBtn.element.addEventListener('click', newGame);
 		mainGame.nextRoundBtn.element.addEventListener('click', newRound);
 		
@@ -360,8 +367,8 @@ function SubGameView(finalScore){
 		if(wholeRound == 5){
 			mainGame.nextRoundBtn.setStyle('display', 'none');
 			
-			mainGame.newGameBtn.setStyle('left', '42%');
-			mainGame.newGameBtn.setStyle('top', '45%');
+			mainGame.newGameBtn.setStyle('left', '43%');
+			mainGame.newGameBtn.setStyle('top', '80%');
 						
 			var resultDiv = new Element();
 			resultDiv.create('div');
@@ -380,7 +387,6 @@ function SubGameView(finalScore){
 	var newGame = function(){
 		mainBox.removeElements();
 		
-		console.log(mainBox[0]);
 		mainGame.scoreDiv.removeFrom(document.body);
 		mainGame.newGameBtn.setStyle('display', 'none');
 		mainGame.initScoreDiv();
@@ -391,6 +397,13 @@ function SubGameView(finalScore){
 	}
 	
 	var newRound = function(){
+		
+		mainBox.removeElements();
+		mainGame.wholeRound++;
+			
+		mainGame.scoreDiv.setStyle('display', 'none');
+		
+		mainGame.initGame();
 		mainGame.newGameBtn.element.removeEventListener('click', newGame);
 		mainGame.nextRoundBtn.element.removeEventListener('click', newRound);
 	}
