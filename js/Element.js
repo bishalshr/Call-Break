@@ -41,7 +41,11 @@ function Element() {
 	}
 	
 	this.addClass = function(className) {
-		that.element.setAttribute('class', className);
+		this.element.classList.add(className);
+	}
+	
+	this.removeClass = function(className) {
+		this.element.classList.remove(className);
 	}
 	
 	this.addId = function(className) {

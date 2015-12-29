@@ -1,5 +1,7 @@
-function SubGame(finalScore){
-	var animator;
+function SubGame(finalScore, diff, mus){
+	var animator, mainBox;
+	var difficulty = diff, sound = mus;
+	
 	var count = 0, flag = 0;
 	var throwingPos, throwTurn, callTurn, wholeRound, turn, round = 0;
 	var p1Played, p2Played, p3Played, youPlayed;
@@ -13,7 +15,7 @@ function SubGame(finalScore){
 	
 	var player1, player2, player3, yourHand;
 	var rule, callHandSelect;
-	var thrownCards = [], timer = 500;
+	var thrownCards = [], timer = 0;
 	
 	
 	for(var i = 0; i < 13; i++){
@@ -32,7 +34,7 @@ function SubGame(finalScore){
 	
 	this.init = function(){
 		
-		subGameView.setTable();
+		mainBox = subGameView.setTable();
 		
 		subGameView.setChair(700, 110, 400, 190);
 		subGameView.setChair(250, 10, 150, 400);
@@ -80,9 +82,9 @@ function SubGame(finalScore){
 		player3.sortByValue();
 		
 		you = new Player(yourHand);
-		aIPlayer1 = new AIPlayer(player1);
-		aIPlayer2 = new AIPlayer(player2);
-		aIPlayer3 = new AIPlayer(player3);
+		aIPlayer1 = new AIPlayer(player1, difficulty);
+		aIPlayer2 = new AIPlayer(player2, difficulty);
+		aIPlayer3 = new AIPlayer(player3, difficulty);
 		
 		aIPlayer1.separateCards();
 		aIPlayer2.separateCards();
@@ -94,7 +96,7 @@ function SubGame(finalScore){
 	
 	var dealCards = function(){
 		count = 0, flag = 0;
-		animator = new Animator();
+		animator = new Animator(0, mainBox);
 		
 		deal();
 	
@@ -102,8 +104,10 @@ function SubGame(finalScore){
 	
 	
 	var deal = function(){
-		var snd = new Audio("aud.mp3"); // buffers automatically when created
-		snd.play();
+		if(sound){
+			var snd = new Audio("aud.mp3"); // buffers automatically when created
+			snd.play();
+		}
 		var pos = parseInt(count / 4);
 		
 		if(flag == 0){
@@ -111,7 +115,7 @@ function SubGame(finalScore){
 			animator.animate('left', 380, 50);
 			
 			var card = player1.getCard(pos);
-			subGameView.setImage(0, pos, card, false);
+			subGameView.setImage(0, pos, card, true);
 						
 			flag++;
 			count++;
@@ -121,7 +125,7 @@ function SubGame(finalScore){
 			animator.animate('top', -150, 50);
 			
 			var card = player2.getCard(pos);
-			subGameView.setImage(1, pos, card, false);
+			subGameView.setImage(1, pos, card, true);
 						
 			flag++;
 			count++;
@@ -131,7 +135,7 @@ function SubGame(finalScore){
 			animator.animate('left', -380, 50);
 			
 			var card = player3.getCard(pos);
-			subGameView.setImage(2, pos, card, false);
+			subGameView.setImage(2, pos, card, true);
 						
 			flag++;
 			count++;
@@ -140,7 +144,7 @@ function SubGame(finalScore){
 			animator.init(0, 0);
 			animator.animate('top', 150, 50);
 			var card = yourHand.getCard(pos);
-			subGameView.setImage(3, pos, card, false);
+			subGameView.setImage(3, pos, card, true);
 					
 			for(var i = 39; i< 52; i++){
 				playerDiv.push(cardBox[i].element);
@@ -260,8 +264,9 @@ function SubGame(finalScore){
 		
 		throwingPos = 0;
 		throwTurn = 0;
+		timer = 500;
 		p1Played = p2Played = p3Played = youPlayed = null;
-		if(round == 0){
+		if(round == 13){
 			setTimeout(finish, 200);
 		}
 		
@@ -276,6 +281,7 @@ function SubGame(finalScore){
 		}
 		if(turn == 1 && throwTurn != 4){
 			
+			console.log(timer);
 			p1Played = aIPlayer1.throwCard(thrownCards[round]);
 			thrownCards[round].push(p1Played);
 			
@@ -360,8 +366,10 @@ function SubGame(finalScore){
 			var index = yourHand.getPosition(youPlayed);
 			subGameView.removeChildNodes(39 + index);
 		
-			var snd = new Audio("throw.mp3"); // buffers automatically when created
-			snd.play();
+			if(sound){
+				var snd = new Audio("throw.mp3"); // buffers automatically when created
+				snd.play();
+			}
 			
 			yourHand.removePlayerCard(youPlayed);
 			
@@ -385,8 +393,10 @@ function SubGame(finalScore){
 		var index = player1.getPosition(p1Played);
 		player1.removePlayerCard(p1Played);
 		
-		var snd = new Audio("throw.mp3"); // buffers automatically when created
-		snd.play();
+		if(sound){
+			var snd = new Audio("throw.mp3"); // buffers automatically when created
+			snd.play();
+		}
 		
 		animator.init(p1CardValue, 2);
 		animator.animate('right', 375, 200);
@@ -405,9 +415,11 @@ function SubGame(finalScore){
 		
 		player2.removePlayerCard(p2Played);
 		
-		var snd = new Audio("throw.mp3"); // buffers automatically when created
-		snd.play();
-			
+		if(sound){
+			var snd = new Audio("throw.mp3"); // buffers automatically when created
+			snd.play();
+		}
+		
 		animator.init(p2CardValue, 3);
 		animator.animate('top', 250, 200);
 			
@@ -423,9 +435,11 @@ function SubGame(finalScore){
 		var p3CardValue = p3Played.getImgValue();
 		var index = player3.getPosition(p3Played);
 		
-		var snd = new Audio("throw.mp3"); // buffers automatically when created
-		snd.play();
-			
+		if(sound){
+			var snd = new Audio("throw.mp3"); // buffers automatically when created
+			snd.play();
+		}
+		
 		player3.removePlayerCard(p3Played);
 		animator.init(p3CardValue,4);
 		animator.animate('left', 375, 200);
@@ -450,8 +464,10 @@ function SubGame(finalScore){
 		
 		subGameView.clearPlayingArea();
 		
-		var snd = new Audio("audio.mp3"); // buffers automatically when created
-		snd.play();
+		if(sound){
+			var snd = new Audio("audio.mp3"); // buffers automatically when created
+			snd.play();
+		}
 		
 		if(won == 1){
 			animator.init(0, 0);
@@ -485,7 +501,7 @@ function SubGame(finalScore){
 			subGameView.updateHandsWon(won, aIPlayer3.getWonHands());
 		}
 		startRound();
-		timer = 500;
+		timer = 0;
 	
 	}
 		

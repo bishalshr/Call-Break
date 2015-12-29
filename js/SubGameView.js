@@ -14,6 +14,7 @@ function SubGameView(finalScore){
 		mainBox.create('div');
 		mainBox.addClass('main-box');
 		mainBox.appendTo(document.body);
+		return mainBox;
 	}
 	
 	
@@ -259,9 +260,9 @@ function SubGameView(finalScore){
 		mainGame.nextRoundBtn.setStyle('display', 'none');
 		mainGame.closeBtn.setStyle('display', 'block');
 		mainGame.closeBtn.setStyle('left', '40%');
-		mainGame.newGameBtn.setStyle('left', '50%');
+		mainGame.mainMenuBtn.setStyle('left', '50%');
 		
-		mainGame.newGameBtn.element.addEventListener('click', newGame);
+		mainGame.mainMenuBtn.element.addEventListener('click', mainMenu);
 			
 	}
 	
@@ -309,7 +310,7 @@ function SubGameView(finalScore){
 		mainGame.scoreDiv.setStyle('display', 'block');
 		mainGame.nextRoundBtn.setStyle('display', 'block');
 		mainGame.closeBtn.setStyle('display', 'none');
-	//	mainGame.newGameBtn.setStyle('display', 'block');
+	//	mainGame.mainMenuBtn.setStyle('display', 'block');
 		
 		scoreTable = mainGame.table;
 		
@@ -346,9 +347,9 @@ function SubGameView(finalScore){
 		var childElement = mainBox.element.children;
 		
 		for(var i = 0; i < boxes.length; i++){
-			console.log(boxes);
 			mainBox.element.removeChild(boxes[i].element);
 		}
+		
 		mainBox.element.removeChild(playerInput.element);
 		var yourTotal = finalScore.getYourTotal();
 		var p1Total = finalScore.getP1Total();
@@ -360,15 +361,15 @@ function SubGameView(finalScore){
 		mainGame.p2Total.addText(p2Total.toFixed(1));
 		mainGame.p3Total.addText(p3Total.toFixed(1));
 		
-		mainGame.newGameBtn.element.addEventListener('click', newGame);
+		mainGame.mainMenuBtn.element.addEventListener('click', mainMenu);
 		mainGame.nextRoundBtn.element.addEventListener('click', newRound);
 		
 				
 		if(wholeRound == 5){
 			mainGame.nextRoundBtn.setStyle('display', 'none');
 			
-			mainGame.newGameBtn.setStyle('left', '43%');
-			mainGame.newGameBtn.setStyle('top', '80%');
+			mainGame.mainMenuBtn.setStyle('left', '43%');
+			mainGame.mainMenuBtn.setStyle('top', '80%');
 						
 			var resultDiv = new Element();
 			resultDiv.create('div');
@@ -384,15 +385,15 @@ function SubGameView(finalScore){
 		}
 	}
 	
-	var newGame = function(){
+	var mainMenu = function(){
 		mainBox.removeElements();
 		
 		mainGame.scoreDiv.removeFrom(document.body);
-		mainGame.newGameBtn.setStyle('display', 'none');
-		mainGame.initScoreDiv();
-		mainGame.initGame();
+		
+		var mainMenu = new MainMenu();
+		mainMenu.init();
 			
-		mainGame.newGameBtn.element.removeEventListener('click', newGame);
+		mainGame.mainMenuBtn.element.removeEventListener('click', mainMenu);
 		
 	}
 	
@@ -404,7 +405,7 @@ function SubGameView(finalScore){
 		mainGame.scoreDiv.setStyle('display', 'none');
 		
 		mainGame.initGame();
-		mainGame.newGameBtn.element.removeEventListener('click', newGame);
+		mainGame.mainMenuBtn.element.removeEventListener('click', mainMenu);
 		mainGame.nextRoundBtn.element.removeEventListener('click', newRound);
 	}
 }

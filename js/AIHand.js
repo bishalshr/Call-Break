@@ -1,8 +1,8 @@
-function AIPlayer(h){
+function AIPlayer(h, diff){
 	var hand = h;
 	var calledHands;
 	var wonHands = 0;
-	
+	var difficulty = diff;
 	var rule = new Rule();
 	
 	var thrownCards = [], thrownSpades = [], thrownHearts = [], thrownClubs = [], thrownDiamonds = [], highCards = [13, 13, 13, 13];
@@ -116,18 +116,15 @@ function AIPlayer(h){
 			highCardValue = highCard.getValue();
 			validCards();
 		}
-		
-		
-		if(cards.length == 0){
+		else{
 			validCard = allCardsHand;
 			situation = 0;
 		}
 		
-		if(validCard.length == 1)
-			throwingCard = validCard[0];
-		
-		else
-			searchSuitableCard();
+		if(difficulty == 1)
+			begineerLevel();
+		else 
+			mediumLevel();
 		
 		removeCard(throwingCard);
 		validCard = [];
@@ -274,6 +271,22 @@ function AIPlayer(h){
 		}
 	}
 	
+	
+	var mediumLevel = function(){
+		if(validCard.length == 1)
+			throwingCard = validCard[0];
+		
+		else
+			searchSuitableCard();
+		
+	}
+	
+	var begineerLevel = function(){
+		if(turn == 1)
+			throwMinimalCard();
+		else
+			throwingCard = validCard[0];
+	}
 	
 	var throwFirstCard = function(){
 		var value0, value1, value2, value3;

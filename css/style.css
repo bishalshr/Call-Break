@@ -11,6 +11,124 @@ body{
 	background-size : 100%;
 }
 
+.menu-box{
+	background : url('../images/menu.png');
+}
+
+.text-box{
+	width: 100%;
+	
+	text-align: center;
+	position: relative;
+}
+.title-box{
+	padding-top: 0%;
+}
+
+.button-box-wrp{
+	position: absolute;
+	bottom: 0px;
+	
+width: 100%;
+	
+}
+
+.button-box{
+	padding: 40px 110px;
+	line-height: 50px;
+}
+
+.button-box ul{
+	margin: 0px auto;
+}
+
+.button-box ul li{
+	padding-right: 58px;
+	list-style: none;
+	float: left;
+	margin: 0px auto;
+}
+
+
+
+.image-box{
+	position: absolute;
+	top: 85px;
+	left: 180px; 
+	text-align: center;
+	height: 450px;
+	width: 540px;
+}
+
+.text-span{
+	line-height: 24px;
+	font-size: 0px;
+	color: white;
+	font-weight: bold;
+	font-family: Montserrat;
+}
+
+.title-text-span{
+	line-height: 56px;
+	font-size: 42px;
+	color: white;
+	font-weight: bold;
+	font-family: Montserrat;
+	position: absolute;
+	left: -108px;
+}
+
+.right{
+	left: 900px;
+}
+
+.spade-img{
+	width: 522px;
+	height: 557px;
+	position: absolute;
+	top: 68px;
+	left: 139px; 
+	display: block;
+}
+
+.menu-start{
+	background: #171717;
+}
+
+.submenu-box{
+	height: 300px;
+	width: 300px;
+	position: absolute;
+	top: 150px;
+	left: 300px;
+	background: url('../images/submenu.png') 0 0 no-repeat;
+	background-size: 100% 100%;
+}
+
+.submenu-heading{
+	font-family: Montserrat;
+	font-weight: bold;
+	font-size: 25px;
+	text-align: center;
+	color: white;
+	padding-bottom: 30px;
+	padding-top: 30px;
+}
+
+.submenu-items{
+	font-family: Montserrat;
+	font-size: 18px;
+	color: white;
+	text-align: center;
+	padding: 5px 0px;
+	cursor: pointer;
+}
+
+.selected{
+	color: black;
+	background: white;
+}
+
 .small-box{
 	position:absolute;
 
@@ -37,11 +155,13 @@ body{
 	display: block;
 	cursor: pointer;
 	margin-top: 5px;
+	padding: 0px 20px;
 	background: url('../images/button.png') 0 0 no-repeat;
 	background-size: 100% 100%;
 	font-family: Montserrat;
-	color: #474141;
+	color: black;
 	border: none;
+	
 }
 
 .player-input{
@@ -58,7 +178,7 @@ body{
 	height: 320px;
 	width: 550px;
 	position: absolute;
-	left: 400px;
+	left: 480px;
 	top: 50px;
 	z-index: 1;
 	background: url('../images/score.png') 0 0 no-repeat;
@@ -88,10 +208,6 @@ body{
 	color: white;
 	background: url('../images/button2.png') 0 0 no-repeat;
 	background-size: 100% 100%;
-}
-
-.close-btn{
-	left: 45%;
 }
 
 .newgame-btn{
@@ -138,4 +254,26 @@ td{
 	line-height: 30px;
 	border: none;
 	
+}
+.menu-btn{
+	background: url('../images/normal-button.png') 0 0 no-repeat;
+	background-size: 100% 100%;
+	height: 40px;
+	padding: 0px 20px;
+}
+
+.close-btn{
+	left: 45%;
+	background: url('../images/close-button.png') 0 0 no-repeat;
+	background-size: 100% 100%;
+}
+
+.clear-fix:before, .clear-fix:after{
+content: "";
+display:table;}
+.clear-fix:after{
+clear:both;
+}
+.clear-fix{
+zoom:1; /*IE6&7*/
 }
