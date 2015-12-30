@@ -63,4 +63,13 @@ function Element() {
 	this.addText = function(someText){
 		that.element.innerHTML = someText;
 	}
+	
+	this.removeImages = function(){
+		var child = that.element.childNodes;
+		for(var i = 0; i < child.length; i++){
+			if(child[i].className == 'img'){
+				child[i].remove();
+			}
+		}
+	}
 }	

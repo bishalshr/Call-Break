@@ -7,9 +7,9 @@ function AIPlayer(h, diff){
 	
 	var thrownCards = [], thrownSpades = [], thrownHearts = [], thrownClubs = [], thrownDiamonds = [], highCards = [13, 13, 13, 13];
 	var situation = 0;			//0 means any. 1 means same suit but any. 2 means same suit higher. 3 means troop any. 4 means troop higher.
-	var heartsInHand = [], spadesInHand = [], clubsInHand = [], diamondsInHand = [], allCardsInHand = [];
+	var heartsInHand = [], spadesInHand = [], clubsInHand = [], diamondsInHand = [], cardsCollection = [];
 	var validCard = [];
-	var allCardsHand = [], throwingCard, round = 0, turn, playedSuit, highCard;
+	var allCardsInHand = [], throwingCard, round = 0, turn, playedSuit, highCard;
 	var trooped = [0, 0, 0, 0];
 	
 	
@@ -33,7 +33,7 @@ function AIPlayer(h, diff){
 	}
 	
 	
-	this.setThrownCards = function(cards){
+	this.addThrownCards = function(cards){
 		var played = cards[0].getSuit();
 		
 		for(var i = 0; i < cards.length; i++){
@@ -64,13 +64,10 @@ function AIPlayer(h, diff){
 		setHighCard(thrownDiamonds, 1);
 		setHighCard(thrownClubs, 2);
 		setHighCard(thrownHearts, 3 );
-		
-		
 	}
 	
 	
 	var setHighCard = function(array, pos){
-		
 		for(var i = 0; i < array.length; i++){
 			if(array[i] == highCards[pos])
 				highCards[pos]--;
@@ -79,7 +76,6 @@ function AIPlayer(h, diff){
 	
 	
 	this.separateCards = function(){
-		
 		for(var i = 0; i < hand.getCardCount(); i++){
 			var card = hand.getCard(i);
 			
@@ -95,17 +91,17 @@ function AIPlayer(h, diff){
 			else
 				heartsInHand.push(card);
 			
-			allCardsHand.push(card);
+			allCardsInHand.push(card);
 		}
 		
-		allCardsInHand.push(spadesInHand);
-		allCardsInHand.push(diamondsInHand);
-		allCardsInHand.push(clubsInHand);
-		allCardsInHand.push(heartsInHand)
+		cardsCollection.push(spadesInHand);
+		cardsCollection.push(diamondsInHand);
+		cardsCollection.push(clubsInHand);
+		cardsCollection.push(heartsInHand)
 	}
 	
+	
 	this.throwCard = function(cards){
-		
 		var highCardSuit, highCardValue;
 		turn = cards.length + 1;
 		
@@ -114,10 +110,10 @@ function AIPlayer(h, diff){
 			highCard = rule.checkHighCard(cards);
 			highCardSuit = highCard.getSuit();
 			highCardValue = highCard.getValue();
-			validCards();
+			addValidCardsArray();
 		}
 		else{
-			validCard = allCardsHand;
+			validCard = allCardsInHand;
 			situation = 0;
 		}
 		
@@ -131,15 +127,18 @@ function AIPlayer(h, diff){
 		round++;
 		situation = 0;
 		return throwingCard;
-		
 	}
+	
 	
 	this.callHand = function(){
 		var toCall = 0;
-		toCall += seeHands(heartsInHand);
-		toCall += seeHands(diamondsInHand);
-		toCall += seeHands(clubsInHand);
-		toCall += seeSpadeHands(spadesInHand);
+		toCall += addHandFromSuit(heartsInHand);
+		toCall += addHandFromSuit(diamondsInHand);
+		toCall += addHandFromSuit(clubsInHand);
+		if(difficulty == 1)
+			toCall += addHandFromSuit(spadesInHand);
+		else
+			toCall += addHandFromSpade(spadesInHand);
 		
 		this.setCalledHands(toCall);
 		if(toCall == 0)
@@ -148,7 +147,8 @@ function AIPlayer(h, diff){
 			return toCall;
 	}
 	
-	var seeHands = function(cards){
+	
+	var addHandFromSuit = function(cards){
 		var toCall = 0;
 		for(var i = 0; i < cards.length; i++){
 			var card = cards[i].getValue();
@@ -162,7 +162,8 @@ function AIPlayer(h, diff){
 		return toCall;
 	}
 	
-	var seeSpadeHands = function(cards){
+	
+	var addHandFromSpade = function(cards){
 		var toCall = 0;
 		for(var i = cards.length - 1; i >= 0; i--){
 			var card = cards[i].getValue();
@@ -179,7 +180,6 @@ function AIPlayer(h, diff){
 					if(cards[i-1].getValue() >= 10)
 						toCall++;
 				}
-				
 			}
 		}
 		if(cards.length >= 3 && cards.length <= 5 && toCall == 0)
@@ -192,26 +192,25 @@ function AIPlayer(h, diff){
 			toCall = cards.length - 2;
 		
 		return toCall;
-		
 	}
 	
-	var validCards = function(){
-		var validCardArray = allCardsInHand[playedSuit - 1];
+	
+	var addValidCardsArray = function(){
+		var validCardArray = cardsCollection[playedSuit - 1];
 		
 		if(validCardArray.length != 0){
 			
 			for(var i = 0; i < validCardArray.length; i++){
-				
 				if(validCardArray[i].getValue() > highCard.getValue() && playedSuit == highCard.getSuit())
 					validCard.push(validCardArray[i]);
 			}
+			
 			if(validCard.length == 0){
 				validCard = validCardArray;
 				situation = 1;
 			}
 			else
 				situation = 2;
-			
 		}
 		
 		else if(validCardArray.length == 0 && spadesInHand.length != 0){
@@ -229,15 +228,17 @@ function AIPlayer(h, diff){
 				}
 				
 				if(validCard.length == 0){
-					validCard = allCardsHand;
+					validCard = allCardsInHand;
 					situation = 0;
 				}
 				else 
 					situation = 4;
 					
 			}
-		} else{
-			validCard = allCardsHand;
+		}
+		
+		else{
+			validCard = allCardsInHand;
 			situation = 0;
 		}
 	}
@@ -266,8 +267,8 @@ function AIPlayer(h, diff){
 				heartsInHand.splice(index, 1);
 			}
 		
-			index = allCardsHand.indexOf(card);
-			allCardsHand.splice(index, 1);
+			index = allCardsInHand.indexOf(card);
+			allCardsInHand.splice(index, 1);
 		}
 	}
 	
@@ -283,41 +284,23 @@ function AIPlayer(h, diff){
 	
 	var begineerLevel = function(){
 		if(turn == 1)
-			throwMinimalCard();
+			throwWinningCard();
 		else
 			throwingCard = validCard[0];
 	}
 	
 	var throwFirstCard = function(){
-		var value0, value1, value2, value3;
 		if(round < 5){
 			
 			if(spadesInHand.length >= 5 && spadesInHand[spadesInHand.length - 1] != highCards[0])
 				throwingCard = spadesInHand[0];
 			
 			if(dropOthersHighCard() == 0)
-				throwMinimalCard();
+				throwMinimumSuitCard();
 		}
 		else{
-			value0 = checkBestCards(spadesInHand, 0);
-			value3 = checkBestCards(heartsInHand, 3);
-			value2 = checkBestCards(clubsInHand, 2);
-			value1 = checkBestCards(diamondsInHand, 1);
+			throwWinningCard();
 			
-			if(value0 == 2)
-				throwingCard = spadesInHand[spadesInHand.length - 1];
-			
-			else if(value3 == 2 && trooped[3] == 0)
-				throwingCard = heartsInHand[heartsInHand.length - 1];
-		
-			else if(value2 == 2 && trooped[2] == 0)
-				throwingCard = clubsInHand[clubsInHand.length - 1];
-		
-			else if(value1 == 2 && trooped[1] == 0)
-				throwingCard = diamondsInHand[diamondsInHand.length - 1];
-			
-			else
-				throwMinimalCard();
 		}
 		
 	}
@@ -343,22 +326,43 @@ function AIPlayer(h, diff){
 		return 1;
 	}
 	
-	var throwMinimalCard = function(){
+	var throwMinimumSuitCard = function(){
+		var min = allCardsInHand;
 		
-		var min = allCardsHand;
-		
-		for(var i = 1; i < allCardsInHand.length; i++){
-			
-			if (allCardsInHand[i].length < min.length && allCardsInHand[i].length > 0)
-				min = allCardsInHand[i];
+		for(var i = 1; i < cardsCollection.length; i++){
+			if (cardsCollection[i].length < min.length && cardsCollection[i].length > 0)
+				min = cardsCollection[i];
 		}
-			if(min[min.length -1].getValue() == highCards[min[0].getSuit() - 1] && turn == 1)
-				throwingCard = min[min.length - 1];
-			else
-				throwingCard = min[0];
-
+		
+		if(min[min.length -1].getValue() == highCards[min[0].getSuit() - 1] && turn == 1)
+			throwingCard = min[min.length - 1];
+		else
+			throwingCard = min[0];
 	}
 	
+	
+	var throwWinningCard = function(){
+		var value0, value1, value2, value3;
+		value0 = checkBestCards(spadesInHand, 0);
+		value3 = checkBestCards(heartsInHand, 3);
+		value2 = checkBestCards(clubsInHand, 2);
+		value1 = checkBestCards(diamondsInHand, 1);
+			
+		if(value0 == 2)
+			throwingCard = spadesInHand[spadesInHand.length - 1];
+			
+		else if(value3 == 2 && trooped[3] == 0)
+			throwingCard = heartsInHand[heartsInHand.length - 1];
+		
+		else if(value2 == 2 && trooped[2] == 0)
+			throwingCard = clubsInHand[clubsInHand.length - 1];
+		
+		else if(value1 == 2 && trooped[1] == 0)
+			throwingCard = diamondsInHand[diamondsInHand.length - 1];
+			
+		else
+			throwMinimumSuitCard();
+	}
 	
 	
 	var checkBestCards = function(array, pos){
@@ -382,7 +386,7 @@ function AIPlayer(h, diff){
 				if(turn == 1)
 					throwFirstCard();
 				else 
-					throwMinimalCard();
+					throwMinimumSuitCard();
 				break;
 			case 1:
 				throwingCard = validCard[0];
@@ -406,22 +410,24 @@ function AIPlayer(h, diff){
 		if(value == 2 && turn != 4)
 			throwingCard = validCard[validCard.length - 1];
 		else{
-		switch(turn){
-			case 2:
-				throwingCard = validCard [validCard.length-2];
-				break;
-			case 3:
-				if(highCard.getValue() > highCards[playedSuit - 1] - 4)
+			switch(turn){
+				case 2:
+					throwingCard = validCard [validCard.length-2];
+					break;
+				
+				case 3:
+					if(highCard.getValue() > highCards[playedSuit - 1] - 4)
+						throwingCard = validCard[0];
+					else if(validCard[validCard.length -2] > highCards[playedSuit - 1] - 5)
+						throwingCard = validCard[validCard.length - 2];
+					else 
+						throwingCard = validCard[validCard.length - 1];
+					break;
+				
+				case 4:
 					throwingCard = validCard[0];
-				else if(validCard[validCard.length -2] > highCards[playedSuit - 1] - 5)
-					throwingCard = validCard[validCard.length - 2];
-				else 
-					throwingCard = validCard[validCard.length - 1];
-				break;
-			case 4:
-				throwingCard = validCard[0];
-				break;
+					break;
+			}
 		}
 	}
-}
 }

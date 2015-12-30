@@ -83,8 +83,8 @@ width: 100%;
 }
 
 .spade-img{
-	width: 522px;
-	height: 557px;
+	width: 462px;
+	height: 497px;
 	position: absolute;
 	top: 68px;
 	left: 139px; 
@@ -241,16 +241,12 @@ td{
 }
 
 .score-header{
-	
-	
 	line-height: 30px;
 	border: none;
 	
 }
 
 .total-score{
-
-	
 	line-height: 30px;
 	border: none;
 	
