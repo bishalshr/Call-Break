@@ -5,30 +5,28 @@ function Deck() {
 		deck[i] = new Card();
 	}
 	
-  var cardsUsed;
+  var cardsUsed = 0;
 
   this.newDeck = function() {
-    var cardCt = 0; 
+    var cardCount = 0; 
     for ( var suit = 1; suit <= 4; suit++ ) {
       for ( var value = 1; value <= 13; value++ ) {
     
-				deck[cardCt].setCard(value, suit, value + 13 * (suit-1));
-        cardCt++;
+				deck[cardCount].setCard(value, suit, value + 13 * (suit-1));
+        cardCount++;
       }
     }
-    cardsUsed = 0;
   }
 	
   this.shuffle = function() {
     for ( var i = deck.length - 1; i > 0; i-- ) {
-			var rand = parseInt(Math.random()*(i+1));
+			var rand = parseInt(Math.random() * (i + 1));
       var temp = new Card();
 			temp = deck[i];
       deck[i] = deck[rand];
       deck[rand] = temp;
     }
-    cardsUsed = 0;
-	}
+  }
 	
 	this.cardsLeft = function() {
     return deck.length - cardsUsed;
@@ -39,6 +37,5 @@ function Deck() {
       alert('no card left');
     cardsUsed++;
     return deck[cardsUsed - 1];
-      
-     }
+  }
 }    

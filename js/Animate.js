@@ -1,43 +1,48 @@
 function Animator(el, box) {
-	var imag;
-	this.element = el.element;
-	
-	var that = this;
+	var image;
+	var newElement = el;
 	var mainBox = box;
 	var flag = 0;
 	
 	this.init = function(theImage, position){
-		imag = theImage;
+		image = theImage;
 		flag = 1;
-		that.element = document.createElement('img');
-		that.element.setAttribute('src','images/'+imag+'.gif');
-		that.element.setAttribute('class','img');
+		
+		newElement = new Element(); 
+		newElement.create('img');
+		newElement.setAttribute('src','images/'+image+'.gif');
+		newElement.addClass('img');
 		
 		if(position == 0){
-			that.element.style.left = 425 + 'px';
-			that.element.style.top = 250 + 'px';
-		}
-		else if(position ==1){
-			that.element.style.left = 425 + 'px';
-			that.element.style.bottom = 10 + 'px';
-		}
-		else if(position ==2){
-			that.element.style.right = 10 + 'px';
-			that.element.style.top = 250 + 'px';
-		}
-		else if(position ==3){
-			that.element.style.left = 425 + 'px';
-			that.element.style.top = 10 + 'px';
-		}
-		else if(position ==4){
-			that.element.style.left = 10 + 'px';
-			that.element.style.top = 250 + 'px';
+			newElement.setStyle('left', 425);
+			newElement.setStyle('top', 250);
 		}
 		
-		mainBox.element.appendChild(that.element);
+		else if(position ==1){
+			newElement.setStyle('left', 425);
+			newElement.setStyle('bottom', 10);
+		}
+		
+		else if(position ==2){
+			newElement.setStyle('right', 10);
+			newElement.setStyle('top', 250);
+		}
+		
+		else if(position ==3){
+			newElement.setStyle('left', 425);
+			newElement.setStyle('top', 10);
+		}
+		
+		else if(position ==4){
+			newElement.setStyle('left', 10);
+			newElement.setStyle('top', 250);
+		}
+		
+		newElement.appendTo(mainBox.element);
 	}
+	
 	this.animate = function(cssProperty, value, duration) {
-		var style = window.getComputedStyle(that.element);
+		var style = window.getComputedStyle(newElement.element);
 		var initial = style.getPropertyValue(cssProperty);
 		initial = parseInt(initial);
 
@@ -47,17 +52,18 @@ function Animator(el, box) {
 		var intervalId = setInterval(function() {
 			counter++;
 			var current = step * counter;
-			// element.innerHTML = current;
-			that.element.style[cssProperty] = initial + current + 'px';
+			newElement.setStyle(cssProperty, initial + current);
 			
 			if (counter >= duration/10){
 				clearInterval(intervalId);
-				if(flag == 1)
-					mainBox.element.removeChild(that.element);
+				
+				if(flag == 1){
+					mainBox.removeElement(newElement);
+					mainBox.removeImages();
+				}
 				
 			}
 				
 		}, 10);
-	}
-	
+	} 
 }

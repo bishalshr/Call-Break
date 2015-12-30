@@ -66,8 +66,8 @@ function StartAnimation(){
 			spadeImg.appendTo(imageBox.element);
 			
 			animator = new Animator(spadeImg, imageBox);
-			animator.animate('width', -270, 300);
-			animator.animate('height', -270, 300);
+			animator.animate('width', -210, 300);
+			animator.animate('height', -210, 300);
 		}, 1400);
 		
 		 setTimeout(function(){

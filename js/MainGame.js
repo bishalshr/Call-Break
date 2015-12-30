@@ -1,14 +1,14 @@
-
 var MainGame = (function(){
 	function MainGame(){
-		var subGame, totalTable, finalScore, difficulty, sound;
+		var subGame, totalTable, finalScore; 
+		var difficulty, sound;
 		this.closeBtn, this.nextRoundBtn, this.mainMenuBtn, this.scoreDiv, this.table;
 		this.yourTotal, this.p1Total, this.p2Total, this.p3Total;
 		this.wholeRound = 0;
 		
 		var that = this;
+		
 		this.initScoreDiv = function(){
-			
 			that.wholeRound = 0;
 			finalScore = new Score();
 			that.scoreDiv = new Element();
@@ -19,33 +19,31 @@ var MainGame = (function(){
 			
 			that.scoreDiv.appendElement(that.table);
 			that.scoreDiv.appendElement(totalTable);
-		
+			
 			that.nextRoundBtn = new Element();
 			that.nextRoundBtn.create('button');
+			that.nextRoundBtn.addClass('next-button');
+			that.nextRoundBtn.addText('Play Next Round');
+					
 			that.closeBtn = new Element();
 			that.closeBtn.create('button');
-		
-			that.nextRoundBtn.addClass('next-button');
 			that.closeBtn.addClass('next-button');
 			//that.closeBtn.addClass('close-btn');
-		
-			that.nextRoundBtn.addText('Play Next Round');
 			that.closeBtn.addText('Close');
 			
 			that.scoreDiv.appendElement(that.nextRoundBtn);
 			that.scoreDiv.appendElement(that.closeBtn);
 		
-			//that.nextRoundBtn.element.addEventListener('click', newRound);
 			that.closeBtn.element.addEventListener('click', closeScore);
-		
-			that.scoreDiv.appendTo(document.body);
 		
 			that.mainMenuBtn = new Element();
 			that.mainMenuBtn.create('button');
 			that.mainMenuBtn.addText('Main Menu');
 			that.mainMenuBtn.addClass('next-button');
 			that.mainMenuBtn.addClass('newgame-btn');
+			
 			that.scoreDiv.appendElement(that.mainMenuBtn);
+			that.scoreDiv.appendTo(document.body);
 		}
 	
 	
@@ -63,17 +61,6 @@ var MainGame = (function(){
 			that.scoreDiv.setStyle('display','none');
 			that.nextRoundBtn.setStyle('display', 'none');
 		}
-	
-	
-		var newRound = function(){
-			that.wholeRound = subGame.getWholeRound();
-			
-			that.scoreDiv.setStyle('display', 'none');
-			that.mainMenuBtn.setStyle('display', 'none');
-			that.initGame();
-			
-		}
-	
 	
 		var createTable = function(){
 			that.table = new Element();
@@ -117,9 +104,11 @@ var MainGame = (function(){
 		
 			totalTable = new Element(); 
 			totalTable.create('table');
-		
+			totalTable.setStyle('width', '550px');
+				
 			var tr2 = new Element();
 			tr2.create('tr');
+			tr2.addClass('total-score');
 		
 			that.yourTotal = new Element();
 			that.p1Total = new Element();
@@ -133,12 +122,7 @@ var MainGame = (function(){
 		
 			var total = new Element();
 			total.create('td');
-		
-			tr2.addClass('total-score');
-						
 			total.addText('Total');
-		
-			totalTable.setStyle('width', '550px');
 		
 			tr2.appendElement(total);
 			tr2.appendElement(that.yourTotal);

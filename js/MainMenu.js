@@ -1,6 +1,6 @@
 function MainMenu(){
 	var mainBox, newGameBtn, closeGameBtn, soundBtn, difficultyBtn;
-	var buttonsBox, buttonBox, buttonLists;
+	var buttonsBoxWrp, buttonsBox, buttonsList;
 	var difficulty = 2, sound = true;
 	
 	this.init = function(){
@@ -8,47 +8,38 @@ function MainMenu(){
 		mainBox.create('div');
 		mainBox.addClass('main-box');
 		mainBox.addClass('menu-box');
-		mainBox.appendTo(document.body);
+			
+		buttonsBoxWrp = new Element();
+		buttonsBoxWrp.create('div');
+		buttonsBoxWrp.addClass('button-box-wrp');
 		
 		buttonsBox = new Element();
 		buttonsBox.create('div');
-		buttonsBox.addClass('button-box-wrp');
-		buttonsBox.appendTo(mainBox.element);
+		buttonsBox.addClass('button-box');
 		
-		buttonBox = new Element();
-		buttonBox.create('div');
-		buttonBox.addClass('button-box');
-		buttonBox.appendTo(buttonsBox.element);
-		
-		buttonLists = new Element();
-		buttonLists.create('ul');
+		buttonsList = new Element();
 		var buttonList1 = new Element();
-		buttonList1.create('li');
 		var buttonList2 = new Element();
-		buttonList2.create('li');
 		var buttonList3 = new Element();
-		buttonList3.create('li');
 		var buttonList4 = new Element();
+		
+		buttonsList.create('ul');
+		buttonList1.create('li');
+		buttonList2.create('li');
+		buttonList3.create('li');
 		buttonList4.create('li');
 		
 		buttonList1.addClass('button-list');
-		buttonList1.appendTo(buttonLists.element);
 		buttonList2.addClass('button-list');
-		buttonList2.appendTo(buttonLists.element);
 		buttonList3.addClass('button-list');
-		buttonList3.appendTo(buttonLists.element);
 		buttonList4.addClass('button-list');
-		buttonList4.appendTo(buttonLists.element);
-		
-		buttonLists.addClass('clear-fix');
-		buttonLists.appendTo(buttonBox.element);
+		buttonsList.addClass('clear-fix');
 		
 		newGameBtn = new Element();
 		newGameBtn.create('button');
 		newGameBtn.addClass('all-btn');
 		newGameBtn.addClass('menu-btn');
 		newGameBtn.addText('NEW GAME');
-		newGameBtn.appendTo(buttonList1.element);
 		newGameBtn.element.addEventListener('click', startGame);
 		
 		difficultyBtn = new Element();
@@ -56,7 +47,6 @@ function MainMenu(){
 		difficultyBtn.addClass('all-btn');
 		difficultyBtn.addClass('menu-btn');
 		difficultyBtn.addText('DIFFICULTY');
-		difficultyBtn.appendTo(buttonList2.element);
 		difficultyBtn.element.addEventListener('click',difficultyLevel);
 		
 		soundBtn = new Element();
@@ -64,7 +54,6 @@ function MainMenu(){
 		soundBtn.addClass('all-btn');
 		soundBtn.addClass('menu-btn');
 		soundBtn.addText('SOUNDS');
-		soundBtn.appendTo(buttonList3.element);
 		soundBtn.element.addEventListener('click', soundSettings);
 		
 		closeGameBtn = new Element();
@@ -73,31 +62,42 @@ function MainMenu(){
 		closeGameBtn.addClass('close-btn');
 		closeGameBtn.addClass('menu-btn');
 		closeGameBtn.addText('EXIT');
-		closeGameBtn.appendTo(buttonList4.element);
 		closeGameBtn.element.addEventListener('click', closeGame);
-		}
+		
+		closeGameBtn.appendTo(buttonList4.element);
+		soundBtn.appendTo(buttonList3.element);
+		difficultyBtn.appendTo(buttonList2.element);
+		newGameBtn.appendTo(buttonList1.element);
+		buttonList1.appendTo(buttonsList.element);
+		buttonList2.appendTo(buttonsList.element);
+		buttonList3.appendTo(buttonsList.element);
+		buttonList4.appendTo(buttonsList.element);
+		buttonsList.appendTo(buttonsBox.element);
+		buttonsBox.appendTo(buttonsBoxWrp.element);
+		buttonsBoxWrp.appendTo(mainBox.element);
+		mainBox.appendTo(document.body);
+	}
 	
 	var startGame = function(){
-		//var callBreak = new CallBreak(difficulty, sound);
 		mainBox.removeFrom(document.body);
 		var main = MainGame.getInstance();
 		main.initScoreDiv();
 		main.initGame(difficulty, sound);
-		//callBreak.init();
 	}
 	
 	var difficultyLevel = function(){
-		buttonsBox.setStyle('display','none');
+		buttonsBoxWrp.setStyle('display','none');
+		
 		var diffBox = new Element();
 		diffBox.create('div');
 		diffBox.addClass('submenu-box');
-		diffBox.appendTo(mainBox.element);
+		
 		
 		var diffText = new Element();
 		diffText.create('div');
 		diffText.addClass('submenu-heading');
 		diffText.addText('SELECT DIFFICULTY');
-		diffText.appendTo(diffBox.element);
+		
 		
 		var medium = new Element();
 		medium.create('div');
@@ -105,7 +105,7 @@ function MainMenu(){
 		if(difficulty == 2)
 			medium.addClass('selected');
 		medium.addText('INTERMEDIATE');
-		medium.appendTo(diffBox.element);
+		
 		medium.element.addEventListener('click', function(){
 			medium.addClass('selected');
 			low.removeClass('selected');
@@ -118,7 +118,7 @@ function MainMenu(){
 		low.addText('BEGINNER');
 		if(difficulty == 1)
 			low.addClass('selected');
-		low.appendTo(diffBox.element);
+		
 		low.element.addEventListener('click', function(){
 			low.addClass('selected');
 			medium.removeClass('selected');
@@ -130,37 +130,42 @@ function MainMenu(){
 		closeBtn.addClass('all-btn');
 		closeBtn.addClass('close-btn');
 		closeBtn.addClass('menu-btn');
-		closeBtn.setStyle('margin-left', '120px');
+		closeBtn.setStyle('margin-left', '105px');
 		closeBtn.setStyle('margin-top', '90px');
 		closeBtn.addText('CLOSE');
-		closeBtn.appendTo(diffBox.element);
+		
 		closeBtn.element.addEventListener('click', function(){
 			diffBox.removeElements();
-			buttonsBox.setStyle('display','');
+			buttonsBoxWrp.setStyle('display','');
 		});
+		
+		diffText.appendTo(diffBox.element);
+		medium.appendTo(diffBox.element);
+		low.appendTo(diffBox.element);
+		closeBtn.appendTo(diffBox.element);
+		diffBox.appendTo(mainBox.element);
+		
 	}
 	
 	
 	var soundSettings = function(){
-		buttonsBox.setStyle('display','none');
+		buttonsBoxWrp.setStyle('display','none');
 		var soundBox = new Element();
 		soundBox.create('div');
 		soundBox.addClass('submenu-box');
-		soundBox.appendTo(mainBox.element);
 		
 		var soundText = new Element();
 		soundText.create('div');
 		soundText.addClass('submenu-heading');
 		soundText.addText('SOUND');
-		soundText.appendTo(soundBox.element);
-		
+	
 		var soundOn = new Element();
 		soundOn.create('div');
 		soundOn.addClass('submenu-items');
 		soundOn.addText('ON');
 		if(sound)
 			soundOn.addClass('selected');
-		soundOn.appendTo(soundBox.element);
+		
 		soundOn.element.addEventListener('click', function(){
 			soundOn.addClass('selected');
 			soundOff.removeClass('selected');
@@ -173,10 +178,9 @@ function MainMenu(){
 		soundOff.addText('OFF');
 		if(!sound)
 			soundOff.addClass('selected');
-		soundOff.appendTo(soundBox.element);
+		
 		soundOff.element.addEventListener('click', function(){
 			soundOff.addClass('selected');
-		
 			soundOn.removeClass('selected');
 			sound = false;
 		});
@@ -186,14 +190,20 @@ function MainMenu(){
 		closeBtn.addClass('all-btn');
 		closeBtn.addClass('close-btn');
 		closeBtn.addClass('menu-btn');
-		closeBtn.setStyle('margin-left', '120px');
+		closeBtn.setStyle('margin-left', '105px');
 		closeBtn.setStyle('margin-top', '90px');
 		closeBtn.addText('CLOSE');
-		closeBtn.appendTo(soundBox.element);
+		
 		closeBtn.element.addEventListener('click', function(){
 			soundBox.removeElements();
-			buttonsBox.setStyle('display','');
+			buttonsBoxWrp.setStyle('display','');
 		});
+		
+		soundText.appendTo(soundBox.element);
+		soundOff.appendTo(soundBox.element);
+		soundOn.appendTo(soundBox.element);
+		closeBtn.appendTo(soundBox.element);
+		soundBox.appendTo(mainBox.element);
 	}
 	
 	var closeGame = function(){
