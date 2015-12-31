@@ -70,7 +70,7 @@ function PreLoader() {
     loadImages(sources, initGame); // calls initGame after *all* images have finished loading
   };
 
-  function loadImages(sources, callback) {
+  function loadImages(sources, initGame) {
     var images = {};
     var loadedImages = 0;
     var numImages = 0;
