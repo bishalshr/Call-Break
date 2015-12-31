@@ -1,19 +1,31 @@
-function SubGameView(finalScore){
-	var mainBox, boxes = [], cardBox = [];
-	var	playerInfo, playingArea, playedCards = [], playedCardsImg = [], playerInput;
-	var	callHandSelect, handsCalled = [] , handsWon = [];
+function SubGameView(finalScore, diff, music){
+	var mainBox;
+	var boxes = [];
+	var cardBox = [];
+	
+	var difficulty = diff;
+	var sound = music;
+	var	playerInfo;
+	var playingArea;
+	var playedCards = [];
+	var playedCardsImg = [];
+	var playerInput;
+	
+	var	callHandSelect;
+	var handsCalled = [];
+	var handsWon = [];
+	
 	var flag = 0;
-	var scoreBtn;
+	
 	var mainGame = MainGame.getInstance();
-		
-	var newBtn = new Element();
-	newBtn.create('button');
+	
+	var scoreBtn;
+	var newBtn = new Element('button');
 	newBtn.addClass('all-btn');
 		
 	
 	this.setTable = function(){
-		mainBox = new Element();
-		mainBox.create('div');
+		mainBox = new Element('div');
 		mainBox.addClass('main-box');
 		mainBox.appendTo(document.body);
 		return mainBox;
@@ -23,41 +35,30 @@ function SubGameView(finalScore){
 	this.setChair = function(a, b, c, d){
 		var x = 0, y = 0;
 		
-		var box = new Element();
-		box.create('div');
+		var box = new Element('div');
 		box.addClass('small-box');
-		
 		box.setStyle('left', a, 'px');
 		box.setStyle('top', b, 'px');
 		box.setStyle('height', c, 'px');
 		box.setStyle('width', d, 'px');
 		
-		playerInfo = new Element();
-		playerInfo.create('div');
+		playerInfo = new Element('div');
 		playerInfo.addClass('player-info');
 		
-		if(a ==700)
+		if(a ==700){
 			playerInfo.setStyle('top', 150);
-			
-		else if(b == 10){
+		}else if(b == 10){
 			playerInfo.setStyle('left', 150);
 			playerInfo.setStyle('bottom', 0);
-		}
-		
-		else if(a == 10){
+		}else if(a == 10){
 			playerInfo.setStyle('top', 150);
 			playerInfo.setStyle('right', 0);
-		}
-		
-		else{
+		}else{
 			playerInfo.setStyle('left', 150);
 		}
 		
-		var handsCalledSpan = new Element();
-		var handsWonSpan = new Element();
-		
-		handsCalledSpan.create('span');
-		handsWonSpan.create('span');
+		var handsCalledSpan = new Element('span');
+		var handsWonSpan = new Element('span');
 		
 		handsCalledSpan.addClass('handsCalled');
 		handsWonSpan.addClass('handsWon');
@@ -68,11 +69,8 @@ function SubGameView(finalScore){
 		handsCalled.push(handsCalledSpan);
 		handsWon.push(handsWonSpan);
 		
-		var handsCalledNode = new Element();
-		var handsWonNode = new Element();
-		
-		handsCalledNode.create('span');
-		handsWonNode.create('span');
+		var handsCalledNode = new Element('span');
+		var handsWonNode = new Element('span');
 		
 		handsCalledNode.addText('Hands Called:');
 		handsWonNode.addText(' Hands Won:');
@@ -81,33 +79,28 @@ function SubGameView(finalScore){
 		playerInfo.appendElement(handsCalledSpan);
 		playerInfo.appendElement(handsWonNode);
 		playerInfo.appendElement(handsWonSpan);
-		
 		playerInfo.appendTo(box.element);
 		
 		for(var i = 0; i <= 12; i++){
 			var position = i + (flag * 13);
 			
-			cardBox[position] = new Element();
-			cardBox[position].create('div');
+			cardBox[position] = new Element('div');
 			cardBox[position].addClass('card-holder');
 			cardBox[position].addId(position);
 			
 			box.addClass('small-box');
 			
 			if(d == 190){
-				
-				if(a == 700)
+				if(a == 700){
 					cardBox[position].setStyle('right', 0);
-				
+				}
 				cardBox[position].setStyle('top', y);
 				
 				y = y + 20;
-			}
-			else if(d == 400){
-				
-				if(b == 440)
+			}else if(d == 400){
+				if(b == 440){
 					cardBox[position].setStyle('bottom', 0);
-				
+				}
 				cardBox[position].setStyle('left', x);
 				
 				x = x + 25;
@@ -125,8 +118,7 @@ function SubGameView(finalScore){
 	this.setPlayingArea = function(){
 		var x = 0;
 		
-		playingArea = new Element();
-		playingArea.create('div');
+		playingArea = new Element('div');
 		playingArea.addClass('small-box');
 		
 		playingArea.setStyle('left', 350);
@@ -137,97 +129,81 @@ function SubGameView(finalScore){
 		playingArea.appendTo(mainBox.element);
 	
 		for(i = 0; i < 4; i++){
-			playedCards[i] = new Element();
-			playedCards[i].create('div');
+			playedCards[i] = new Element('div');
 			playedCards[i].addClass('small-box');
 			playedCards[i].setStyle('left', x);
 			playedCards[i].appendTo(playingArea.element);
 			
 			x = x + 30;
 		}
+		
 	}
 	
 	
 	this.setThrowingArea = function(){	
-		
 		for(var i = 0; i < 4; i++){
-			var playedCardImage = new Element();
-			playedCardImage.create('img');
+			var playedCardImage = new Element('img');
 			playedCardImage.addClass('img');
 			playedCardsImg.push(playedCardImage);
 		}
-		
 	}
 	
 	
 	this.showAllCardView = function(){
-		playerInput = new Element();
-		playerInput.create('div');
+		playerInput = new Element('div');
 		playerInput.addClass('player-input');
 		playerInput.appendTo(mainBox.element);
-	
-		newBtn.addText('Show & Arrange');
-		
 		playerInput.appendElement(newBtn);
 		
+		newBtn.addText('Show & Arrange');
 		return newBtn;
 	}
 	
 	
 	this.setImage = function(i, position, card, showCard){
 		var imgDiv = cardBox[position+(i*13)];
+		var img = new Element('img');
 		
-		var img = new Element();
-		img.create('img');
-		
-		if(showCard == false)
+		if(showCard == false){
 			img.setAttribute('src','images/'+0+'.gif');
-		
-		else{
+		}else{
 			var imageNum = card.getImgValue();
 			img.setAttribute('src','images/'+imageNum+'.gif');
 		}
 		
 		imgDiv.appendElement(img);
-		
 	}
 	
 	
 	this.arrangeCardView = function(){
-		
 		for(var i = 39; i<=51; i++){
-			cardBox[i].removeChildElement();
+			cardBox[i].removeChildElements();
 		}
-		playerInput.removeElement(newBtn);
+		playerInput.removeChildElement(newBtn);
 	}
 	
 	
 	this.callHandView = function(){
-		callHandSelect = new Element();
-		callHandSelect.create('select');
+		callHandSelect = new Element('select');
 		callHandSelect.addClass('select-hand');
 		
-		callHandText = new Element();
-		callHandText.create('span');
+		callHandText = new Element('span');
 		callHandText.addText('Call Hands : ');
 		
 		newBtn.addText('DONE');
 		
 		for(var i = 1; i <= 8; i++){
-			var options = new Element();
-			options.create('option');
-			
-			var textNode = new Element();
-			textNode.create('span');
-			textNode.addText(i);
-			
+			var options = new Element('option');
 			options.setAttribute('value', i);
+			
+			var textNode = new Element('span');
+			textNode.addText(i);
+						
 			options.appendElement(textNode);
 			callHandSelect.appendElement(options);
 		}
 		
-		scoreBtn = new Element();
-		scoreBtn.create('button');
+		scoreBtn = new Element('button');
 		scoreBtn.addClass('all-btn');
 		scoreBtn.addText('See Score');
 			
@@ -244,18 +220,16 @@ function SubGameView(finalScore){
 	
 	this.setCalledHandsView = function(called, num){
 		if(num == 3){
-			playerInput.removeElement(callHandText);
-			playerInput.removeElement(callHandSelect);
-			playerInput.removeElement(newBtn);
+			playerInput.removeChildElement(callHandText);
+			playerInput.removeChildElement(callHandSelect);
+			playerInput.removeChildElement(newBtn);
 		}
-		
 		handsCalled[num].addText(called);
 	}
 	
 	
 	var showScore = function(){
 		mainGame.scoreDiv.setStyle('display', 'block');
-		
 		mainGame.nextRoundBtn.setStyle('display', 'none');
 		mainGame.closeBtn.setStyle('display', 'block');
 		mainGame.closeBtn.setStyle('left', '40%');
@@ -274,31 +248,28 @@ function SubGameView(finalScore){
 	
 	
 	this.removeChildNodes = function(round){
-		cardBox[round].removeChildElement();
+		cardBox[round].removeChildElements();
 	}
 	
 	
 	this.updateHandsWon = function(by , qty){
-			
-		if(by == 1)
+		if(by == 1){
 			handsWon[3].addText(qty);
-		
-		else if(by == 2)
+		}else if(by == 2){
 			handsWon[0].addText(qty);
-		
-		else if(by == 3)
+		}else if(by == 3){
 			handsWon[1].addText(qty);
-		
-		else
+		}else{
 			handsWon[2].addText(qty);
+		}
 	}
 	
 	
 	this.clearPlayingArea = function(){
-		playedCards[0].removeElement(playedCardsImg[0]);
-		playedCards[1].removeElement(playedCardsImg[1]);
-		playedCards[2].removeElement(playedCardsImg[2]);
-		playedCards[3].removeElement(playedCardsImg[3]);
+		playedCards[0].removeChildElement(playedCardsImg[0]);
+		playedCards[1].removeChildElement(playedCardsImg[1]);
+		playedCards[2].removeChildElement(playedCardsImg[2]);
+		playedCards[3].removeChildElement(playedCardsImg[3]);
 	}
 	
 	
@@ -310,19 +281,12 @@ function SubGameView(finalScore){
 		var wholeRound = mainGame.wholeRound;
 		scoreTable = mainGame.table;
 		
-		var tr = new Element();
-		var td0 = new Element();
-		var td1 = new Element();
-		var td2 = new Element();
-		var td3 = new Element();
-		var td4 = new Element();
-		
-		tr.create('tr');
-		td0.create('td');
-		td1.create('td');
-		td2.create('td');
-		td3.create('td');
-		td4.create('td');
+		var tr = new Element('tr');
+		var td0 = new Element('td');
+		var td1 = new Element('td');
+		var td2 = new Element('td');
+		var td3 = new Element('td');
+		var td4 = new Element('td');
 		
 		td0.addText(wholeRound + 1);
 		td1.addText(finalScore.getYourScore(wholeRound).toFixed(1));
@@ -339,10 +303,10 @@ function SubGameView(finalScore){
 		scoreTable.appendElement(tr);
 		
 		for(var i = 0; i < boxes.length; i++){
-			mainBox.element.removeChild(boxes[i].element);
+			mainBox.removeChildElement(boxes[i]);
 		}
+		mainBox.removeChildElement(playerInput);
 		
-		mainBox.element.removeChild(playerInput.element);
 		var yourTotal = finalScore.getYourTotal();
 		var p1Total = finalScore.getP1Total();
 		var p2Total =	finalScore.getP2Total();
@@ -359,32 +323,28 @@ function SubGameView(finalScore){
 				
 		if(wholeRound == 4){
 			mainGame.nextRoundBtn.setStyle('display', 'none');
-			
 			mainGame.mainMenuBtn.setStyle('left', '43%');
 			mainGame.mainMenuBtn.setStyle('top', '80%');
-						
-			var resultDiv = new Element();
-			resultDiv.create('div');
+		
+			var resultDiv = new Element('div');
 			resultDiv.addClass('result');
 			mainGame.scoreDiv.appendElement(resultDiv);
 			
 			if(yourTotal > p1Total && yourTotal > p2Total && yourTotal > p3Total){
 				resultDiv.addText('YOU WON!!!');
-			}
-			
-			else 
+			}else{ 
 				resultDiv.addText('YOU 	LOST!!!');
+			}
 		}
 	}
 	
 	
 	var mainMenu = function(){
-		mainBox.removeElements();
-		
-		mainGame.scoreDiv.removeFrom(document.body);
+		mainBox.remove();
+		mainGame.scoreDiv.remove();
 		
 		var mainMenu = new MainMenu();
-		mainMenu.init();
+		mainMenu.init(difficulty, sound);
 			
 		mainGame.mainMenuBtn.element.removeEventListener('click', mainMenu);
 		
@@ -392,7 +352,7 @@ function SubGameView(finalScore){
 	
 	
 	var newRound = function(){
-		mainBox.removeElements();
+		mainBox.remove();
 		mainGame.wholeRound++;
 			
 		mainGame.scoreDiv.setStyle('display', 'none');
@@ -402,4 +362,3 @@ function SubGameView(finalScore){
 		mainGame.nextRoundBtn.element.removeEventListener('click', newRound);
 	}
 }
-

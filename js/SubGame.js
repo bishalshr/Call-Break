@@ -1,29 +1,62 @@
 function SubGame(finalScore, diff, mus){
-	var animator, mainBox;
-	var difficulty = diff, sound = mus;
+	var animator;
+
+	var	mainBox;
 	
-	var count = 0, flag = 0;
-	var throwingPos, throwTurn, callTurn, wholeRound, turn, round = 0, timer = 0;
+	var difficulty = diff;
+	var sound = mus;
 	
-	var p1Played, p2Played, p3Played, youPlayed;
-	var p1Called, p2Called, p3Called, youCalled;
-	var player1, player2, player3, yourHand;
-	var AIPlayer1, AIPlayer2, AIPlayer3, you;
+	var count = 0;
+	var	flag = 0;
 	
-	var subGameView = new SubGameView(finalScore);
+	var throwingPos;
+	var	throwTurn;
+	var callTurn;
+	var wholeRound;
+	var turn;
+	var round = 0;
+	var timer = 0;
 	
-	var playerInputBtn, playerInfo = [], cardBox = [];
+	var p1Played;
+	var p2Played;
+	var p3Played;
+	var youPlayed;
 	
-	var rule, calledHand, deck;
+	var p1Called;
+	var p2Called;
+	var	p3Called;
+	var youCalled;
+	
+	var player1;
+	var player2;
+	var player3;
+	var yourHand;
+	
+	var AIPlayer1;
+	var AIPlayer2;
+	var AIPlayer3;
+	var you;
+	
+	var subGameView = new SubGameView(finalScore, difficulty, sound);
+	
+	var playerInputBtn;
+	var playerInfo = [];
+	var cardBox = [];
+	
+	var rule;
+	var calledHand;
+	var deck;
 	
 	var thrownCards = [];
 	for(var i = 0; i < 13; i++){
 		thrownCards[i] = [];
 	}
 		
+	
 	this.setWholeRound = function(num){
 		wholeRound = num;
 	}
+	
 	
 	this.init = function(){
 		mainBox = subGameView.setTable();
@@ -42,16 +75,19 @@ function SubGame(finalScore, diff, mus){
 		dealCards();
 	}
 	
+	
 	var setTurn = function(){
 		turn = wholeRound % 4;
 	}
 	
+	
 	var setHand = function(){
-		player1 = new Hand(0);
-		player2 = new Hand(1);
-		player3 = new Hand(2);
-		yourHand = new Hand(3);
+		player1 = new Hand();
+		player2 = new Hand();
+		player3 = new Hand();
+		yourHand = new Hand();
 	}
+	
 	
 	var setDeck = function(){
 		deck = new Deck();
@@ -92,7 +128,7 @@ function SubGame(finalScore, diff, mus){
 	
 	var dealAnimation = function(){
 		if(sound){
-			var snd = new Audio("aud.mp3");
+			var snd = new Audio('sounds/deal.mp3');
 			snd.play();
 		}
 		
@@ -103,38 +139,35 @@ function SubGame(finalScore, diff, mus){
 			animator.animate('left', 380, 50);
 			
 			var card = player1.getCard(pos);
-			subGameView.setImage(0, pos, card, true);
+			subGameView.setImage(0, pos, card, false);
 						
 			flag++;
 			count++;
-				
 		}else if(flag == 1){
 			animator.init(0,0);
 			animator.animate('top', -150, 50);
 			
 			var card = player2.getCard(pos);
-			subGameView.setImage(1, pos, card, true);
+			subGameView.setImage(1, pos, card, false);
 						
 			flag++;
 			count++;
-			
 		}else if(flag == 2){
 			animator.init(0,0);
 			animator.animate('left', -380, 50);
 			
 			var card = player3.getCard(pos);
-			subGameView.setImage(2, pos, card, true);
+			subGameView.setImage(2, pos, card, false);
 						
 			flag++;
 			count++;
-			
 		}else if (flag == 3){
 			animator.init(0, 0);
 			animator.animate('top', 150, 50);
 			
 			var card = yourHand.getCard(pos);
-			subGameView.setImage(3, pos, card, true);
-					
+			subGameView.setImage(3, pos, card, false);
+			
 			for(var i = 0; i <= count / 4; i++){
 				cardBox[39+i].element.addEventListener('click', displayCard);
 			} 
@@ -142,11 +175,9 @@ function SubGame(finalScore, diff, mus){
 			flag = 0;
 			count++;
 		}
-		
 		if(count != 52){
 			setTimeout(dealAnimation, 70);
-		}
-		else{
+		}else{
 			showAllCard();
 		}
 	}
@@ -164,12 +195,14 @@ function SubGame(finalScore, diff, mus){
 		}
 	}
 	
+	
 	var showAllCard = function(){
 		playerInputBtn = subGameView.showAllCardView();
-		playerInputBtn.element.addEventListener('click', arrangeCard);
+		playerInputBtn.element.addEventListener('click', arrangeAndShowCard);
 	}
 	
-	var arrangeCard = function(){
+	
+	var arrangeAndShowCard = function(){
 		yourHand.sortByValue();
 		subGameView.arrangeCardView();
 		
@@ -179,19 +212,18 @@ function SubGame(finalScore, diff, mus){
 			subGameView.setImage(3, id, card, true);
 		}
 		
-		playerInputBtn.element.removeEventListener('click', arrangeCard);
+		playerInputBtn.element.removeEventListener('click', arrangeAndShowCard);
 		callTurn = 0;
 		callHand();
 	}
 		
+	
 	var callHand = function(){
 		if(callTurn == 4){
 			finalScore.setCalledHands(p1Called, p2Called, p3Called, parseInt(youCalled));
 			
 			startRound();
-		}
-		else{
-			
+		}else{
 			if(turn == 0 && callTurn != 4){
 				callYourHand();
 			}
@@ -219,11 +251,10 @@ function SubGame(finalScore, diff, mus){
 		}
 	}
 	
+	
 	var callYourHand = function(){
-		
 		calledHand = subGameView.callHandView().element;
 		playerInputBtn.element.addEventListener('click',callNext);
-		
 	}
 	
 	
@@ -232,13 +263,13 @@ function SubGame(finalScore, diff, mus){
 		
 		you.setCalledHands(youCalled);
 		subGameView.setCalledHandsView(youCalled, 3);
-					
+		
 		playerInputBtn.element.removeEventListener('click',callNext);
 		turn++;
 		callTurn++;
 		callHand();
-			
 	}
+	
 	
 	var startRound = function(){
 		throwingPos = 0;
@@ -247,17 +278,17 @@ function SubGame(finalScore, diff, mus){
 		p1Played = p2Played = p3Played = youPlayed = null;
 		if(round == 13){
 			setTimeout(finish, 200);
-		}
-		else 
+		}else{ 
 			throwCards();
+		}
 	}
-		
+	
+	
 	var throwCards = function(){
 		if(turn == 0 && throwTurn != 4){
 			youThrowCard();
 		}
 		if(turn == 1 && throwTurn != 4){
-			
 			p1Played = aIPlayer1.throwCard(thrownCards[round]);
 			thrownCards[round].push(p1Played);
 			
@@ -266,9 +297,7 @@ function SubGame(finalScore, diff, mus){
 			throwTurn++;
 			timer += 500;
 		}
-		
 		if(turn == 2  && throwTurn != 4){
-			
 			p2Played = aIPlayer2.throwCard(thrownCards[round]);
 			thrownCards[round].push(p2Played);
 			setTimeout(aIThrowCardP2, timer);
@@ -276,9 +305,7 @@ function SubGame(finalScore, diff, mus){
 			throwTurn++;
 			timer += 500;
 		}
-		
 		if(turn == 3 && throwTurn != 4){
-			
 			p3Played = aIPlayer3.throwCard(thrownCards[round]);
 			thrownCards[round].push(p3Played);
 			setTimeout(aIThrowCardP3, timer);
@@ -286,17 +313,14 @@ function SubGame(finalScore, diff, mus){
 			throwTurn++;
 			
 			timer += 500;
-			if(throwTurn != 4)
+			if(throwTurn != 4){
 				setTimeout(youThrowCard, timer);
-			
+			}
 		}
-		
 		if(throwTurn == 4){
-			
 			setTimeout(finishRound, timer + 500);
 			throwTurn = 0;
 		}
-		
 	}
 	
 	
@@ -305,6 +329,7 @@ function SubGame(finalScore, diff, mus){
 			cardBox[i].element.addEventListener('click', throwCard);
 		}
 	} 
+	
 	
 	var throwCard = function(){
 		for(var i = 39; i < 52; i++ ){
@@ -322,8 +347,7 @@ function SubGame(finalScore, diff, mus){
 				
 		if(valid == false){
 			youThrowCard();
-		} 
-		else{
+		}else{
 			thrownCards[round].push(youPlayed);
 			var imageValue = youPlayed.getImgValue();
 			
@@ -331,10 +355,9 @@ function SubGame(finalScore, diff, mus){
 			subGameView.removeChildNodes(39 + index);
 		
 			if(sound){
-				var snd = new Audio("throw.mp3"); // buffers automatically when created
+				var snd = new Audio('sounds/throw.mp3');
 				snd.play();
 			}
-			
 			yourHand.removePlayerCard(youPlayed);
 			
 			animator.init(imageValue,1);
@@ -342,12 +365,10 @@ function SubGame(finalScore, diff, mus){
 		
 			subGameView.throwCard(imageValue, throwingPos);
 			throwingPos++;
-			
 			timer = 500;
 			turn++;
 			throwTurn++;
 			throwCards();
-			
 		}
 	}
 	
@@ -358,7 +379,7 @@ function SubGame(finalScore, diff, mus){
 		player1.removePlayerCard(p1Played);
 		
 		if(sound){
-			var snd = new Audio("throw.mp3"); // buffers automatically when created
+			var snd = new Audio('sounds/throw.mp3'); 
 			snd.play();
 		}
 		
@@ -367,10 +388,8 @@ function SubGame(finalScore, diff, mus){
 		
 		subGameView.removeChildNodes(index);
 		subGameView.throwCard(p1CardValue, throwingPos);
-		
 		throwingPos++;
 	}
-	
 	
 	
 	var aIThrowCardP2 = function(){
@@ -380,7 +399,7 @@ function SubGame(finalScore, diff, mus){
 		player2.removePlayerCard(p2Played);
 		
 		if(sound){
-			var snd = new Audio("throw.mp3"); // buffers automatically when created
+			var snd = new Audio('sounds/throw.mp3');
 			snd.play();
 		}
 		
@@ -389,10 +408,8 @@ function SubGame(finalScore, diff, mus){
 			
 		subGameView.removeChildNodes(13 + index);
 		subGameView.throwCard(p2CardValue, throwingPos);
-		
 		throwingPos++;
 	}
-	
 	
 	
 	var aIThrowCardP3 = function(){
@@ -400,7 +417,7 @@ function SubGame(finalScore, diff, mus){
 		var index = player3.getPosition(p3Played);
 		
 		if(sound){
-			var snd = new Audio("throw.mp3"); // buffers automatically when created
+			var snd = new Audio('sounds/throw.mp3');
 			snd.play();
 		}
 		
@@ -410,10 +427,8 @@ function SubGame(finalScore, diff, mus){
 				
 		subGameView.removeChildNodes(26 + index);
 		subGameView.throwCard(p3CardValue, throwingPos);
-		
 		throwingPos++;
 	}
-	
 	
 	
 	var finishRound = function(){
@@ -428,7 +443,7 @@ function SubGame(finalScore, diff, mus){
 		subGameView.clearPlayingArea();
 		
 		if(sound){
-			var snd = new Audio("audio.mp3"); // buffers automatically when created
+			var snd = new Audio('sounds/win.mp3'); 
 			snd.play();
 		}
 		
@@ -438,25 +453,19 @@ function SubGame(finalScore, diff, mus){
 			
 			you.increaseWonHands();
 			subGameView.updateHandsWon(won, you.getWonHands());
-		}
-		
-		else if(won == 2){
+		}else if(won == 2){
 			animator.init(0, 0);
 			animator.animate('left', 425, 200);
 			
 			aIPlayer1.increaseWonHands();
 			subGameView.updateHandsWon(won, aIPlayer1.getWonHands());
-		}
-		
-		else if(won == 3){
+		}else if(won == 3){
 			animator.init(0, 0);
 			animator.animate('top', -250, 200);
 			
 			aIPlayer2.increaseWonHands();
 			subGameView.updateHandsWon(won, aIPlayer2.getWonHands());
-		}
-		
-		else{
+		}else{
 			animator.init(0, 0);
 			animator.animate('left', -425, 200);
 			
@@ -465,7 +474,6 @@ function SubGame(finalScore, diff, mus){
 		}
 		startRound();
 		timer = 0;
-	
 	}
 		
 	
@@ -475,4 +483,3 @@ function SubGame(finalScore, diff, mus){
 		subGameView.updateFinalScore();
 	}
 }
-	
