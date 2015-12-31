@@ -87,8 +87,7 @@ function PreLoader() {
       images[src] = new Image();
       images[src].onload = function() {
         if (++loadedImages >= numImages) {
-					console.log(loadedImages);
-          that.initGame(images);
+					that.initGame(images);
         }
       };
       images[src].src = sources[src];
