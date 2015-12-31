@@ -1,6 +1,10 @@
 var preLoader = new PreLoader();
+preLoader.init();
 
 function PreLoader() {
+	var that = this;
+	
+	this.init = function(){
   window.onload = function() {
     var sources = {
       resource1: 'images/0.gif',
@@ -67,10 +71,12 @@ function PreLoader() {
       resource62: 'images/spade2.png`',
       resource63: 'images/submenu.png'
     };
-    loadImages(sources, initGame); // calls initGame after *all* images have finished loading
+    that.loadImages(sources, initGame); // calls initGame after *all* images have finished loading
   };
+	
+	}
 
-  function loadImages(sources, initGame) {
+  this.loadImages = function(sources, initGame) {
     var images = {};
     var loadedImages = 0;
     var numImages = 0;
@@ -81,14 +87,14 @@ function PreLoader() {
       images[src] = new Image();
       images[src].onload = function() {
         if (++loadedImages >= numImages) {
-          initGame(images);
+          that.initGame(images);
         }
       };
       images[src].src = sources[src];
     }
   }
 
-  function initGame(images) {
+  this.initGame = function(images) {
     var startingAnimation = new StartingAnimation();
     startingAnimation.init();
   }
