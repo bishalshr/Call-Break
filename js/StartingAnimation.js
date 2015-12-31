@@ -1,6 +1,3 @@
-var startingAnimation = new StartingAnimation();
-startingAnimation.init();
-
 function StartingAnimation(){
 	var mainBox;
 	

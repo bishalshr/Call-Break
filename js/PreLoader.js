@@ -68,15 +68,15 @@ function PreLoader() {
       resource59: 'images/menu-button.png',
       resource60: 'images/score.png',
       resource61: 'images/spade.png',
-      resource62: 'images/spade2.png`',
+      resource62: 'images/spade2.png',
       resource63: 'images/submenu.png'
     };
-    that.loadImages(sources, initGame); // calls initGame after *all* images have finished loading
+    that.loadImages(sources); // calls initGame after *all* images have finished loading
   };
 	
 	}
 
-  this.loadImages = function(sources, initGame) {
+  this.loadImages = function(sources) {
     var images = {};
     var loadedImages = 0;
     var numImages = 0;
@@ -87,6 +87,7 @@ function PreLoader() {
       images[src] = new Image();
       images[src].onload = function() {
         if (++loadedImages >= numImages) {
+					console.log(loadedImages);
           that.initGame(images);
         }
       };
