@@ -23,7 +23,10 @@ function Element(el) {
 	
 	
 	this.removeChildElement = function(el){
-		that.element.removeChild(el.element);
+		try{
+			that.element.removeChild(el.element);
+		}
+		catch(err){}
 	}
 	
 	
