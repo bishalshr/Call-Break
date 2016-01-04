@@ -131,7 +131,6 @@ function SubGame(finalScore, diff, mus){
 			var snd = new Audio('sounds/deal.mp3');
 			snd.play();
 		} */
-		
 		var pos = parseInt(count / 4);
 		
 		if(flag == 0){
