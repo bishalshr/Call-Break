@@ -127,16 +127,16 @@ function SubGame(finalScore, diff, mus){
 	
 	
 	var dealAnimation = function(){
-		if(sound){
+		/* if(sound){
 			var snd = new Audio('sounds/deal.mp3');
 			snd.play();
-		}
+		} */
 		
 		var pos = parseInt(count / 4);
 		
 		if(flag == 0){
 			animator.init(0,0);
-			animator.animate('left', 380, 50);
+			animator.animate('left', 380, 20);
 			
 			var card = player1.getCard(pos);
 			subGameView.setImage(0, pos, card, false);
@@ -145,7 +145,7 @@ function SubGame(finalScore, diff, mus){
 			count++;
 		}else if(flag == 1){
 			animator.init(0,0);
-			animator.animate('top', -150, 50);
+			animator.animate('top', -150, 20);
 			
 			var card = player2.getCard(pos);
 			subGameView.setImage(1, pos, card, false);
@@ -154,7 +154,7 @@ function SubGame(finalScore, diff, mus){
 			count++;
 		}else if(flag == 2){
 			animator.init(0,0);
-			animator.animate('left', -380, 50);
+			animator.animate('left', -380, 20);
 			
 			var card = player3.getCard(pos);
 			subGameView.setImage(2, pos, card, false);
@@ -163,7 +163,7 @@ function SubGame(finalScore, diff, mus){
 			count++;
 		}else if (flag == 3){
 			animator.init(0, 0);
-			animator.animate('top', 150, 50);
+			animator.animate('top', 150, 20);
 			
 			var card = yourHand.getCard(pos);
 			subGameView.setImage(3, pos, card, false);
@@ -176,7 +176,7 @@ function SubGame(finalScore, diff, mus){
 			count++;
 		}
 		if(count != 52){
-			setTimeout(dealAnimation, 70);
+			setTimeout(dealAnimation, 25);
 		}else{
 			showAllCard();
 		}
