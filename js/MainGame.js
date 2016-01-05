@@ -131,8 +131,8 @@ var MainGame = (function(){
 			totalTable.appendElement(tr2);
 		}
 	}
-	var instance;
 	
+	var instance;
 	return{
 		getInstance:function(){
 			if(instance == null){

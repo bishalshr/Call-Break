@@ -10,7 +10,7 @@ function MainMenu(){
 	var buttonsBox;
 	var buttonsList;
 	
-	var difficulty = 2
+	var difficulty = 2;
 	var sound = true;
 	
 	
