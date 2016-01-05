@@ -78,6 +78,9 @@ function PreLoader() {
 
   this.loadImages = function(sources) {
     var images = {};
+		var span = new Element('span');
+		span.addClass('preLoader');
+		span.appendTo(document.body);
     var loadedImages = 0;
     var numImages = 0;
     for (var src in sources) {
@@ -85,15 +88,20 @@ function PreLoader() {
     }
     for (var src in sources) {
       images[src] = new Image();
-      images[src].onload = function() {
-        if (++loadedImages >= numImages) {
+     
+			images[src].onload = function() {
+        var percentComp = parseInt(loadedImages / numImages * 100);
+				console.log(percentComp);	
+				span.addText('LOADING ' + percentComp + '%');
+				
+				if (++loadedImages >= numImages) {
 					that.initGame(images);
         }
       };
-      images[src].src = sources[src];
+			images[src].src = sources[src];
     }
   }
-
+	
   this.initGame = function(images) {
     var startingAnimation = new StartingAnimation();
     startingAnimation.init();
