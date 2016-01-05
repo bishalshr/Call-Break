@@ -91,7 +91,6 @@ function PreLoader() {
      
 			images[src].onload = function() {
         var percentComp = parseInt(loadedImages / numImages * 100);
-				console.log(percentComp);	
 				span.addText('LOADING ' + percentComp + '%');
 				
 				if (++loadedImages >= numImages) {
